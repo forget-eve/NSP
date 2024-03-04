@@ -1,4 +1,4 @@
-![HT4GU%SZMQ@}2ULTMB`9X86](https://github.com/forget-eve/NSP/assets/144145556/b536a251-c50a-4f9c-8e26-dafabb087f64)# 课前须知
+# 课前须知
 
 > [课程主页](https://faculty.ustc.edu.cn/kpxue/zh_CN/zhym/108944/list/index.htm)
 
