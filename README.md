@@ -259,9 +259,9 @@
 </p>
 
 - [x] `被动攻击(passive attack)` : 对传输进行偷听与监视, 获得传输信息, 但不对通信和数据做任何修改。
-  > = 窃听攻击Eavesdrop
-  > 流量分析Traffic analysis
-  > 破解弱加密的数据流cracking of weakly-encrypted data streams
+  > - 窃听攻击Eavesdrop
+  > - 流量分析Traffic analysis
+  > - 破解弱加密的数据流cracking of weakly-encrypted data streams
 
 <p align="center">
   <img src="./img/被动攻击.png" alt="被动攻击">
