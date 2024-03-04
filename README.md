@@ -1,4 +1,4 @@
-# 课前须知
+![HT4GU%SZMQ@}2ULTMB`9X86](https://github.com/forget-eve/NSP/assets/144145556/b536a251-c50a-4f9c-8e26-dafabb087f64)# 课前须知
 
 > [课程主页](https://faculty.ustc.edu.cn/kpxue/zh_CN/zhym/108944/list/index.htm)
 
@@ -181,8 +181,94 @@
   > - 安全服务 Security Services
 
 - [x] 安全模型
-  > - 网络安全模型Model for Network Security: 涉及信息在网络传输中的安全(公网上的私有性保护)
-  > - 网络访问安全模型Network Access Security Model：涉及网络或者系统本身的安全(访问控制)
+  > - `网络安全模型Model for Network Security` : 涉及信息在网络传输中的安全(公网上的私有性保护)
+  > - `网络访问安全模型Network Access Security Model` ：涉及网络或者系统本身的安全(访问控制)
+
+### ISO-OSI模型
+
+<p align="center">
+  <img src="./img/ISO-OSI模型.png" alt="ISO-OSI模型">
+  <p align="center">
+   <span>ISO-OSI模型</span>
+  </p>
+</p>
+
+- [x] 1. 物理层：缆线，信号的编码，网络接插件的电、机械接口
+
+- [x] 2. 数据链路层：成帧，差错控制、流量控制，物理寻址，媒体访问控制
+
+- [x] 3. 网络层：路由、转发，拥塞控制
+
+- [x] 4. 传输层：为会话层提供与下面网络无关的可靠消息传送机制
+
+- [x] 6. 表示层：在两个应用层之间的传输过程中负责数据的表示语法
+
+- [x] 7. 应用层：处理应用进程之间所发送和接收的数据中包含的信息内容。
+
+### 数据的封装
+
+<p align="center">
+  <img src="./img/数据的封装.png" alt="数据的封装">
+  <p align="center">
+   <span>数据的封装</span>
+  </p>
+</p>
+
+### TCP/IP模型
+
+<p align="center">
+  <img src="./img/TCP-IP模型.png" alt="TCP/IP模型">
+  <p align="center">
+   <span>TCP/IP模型</span>
+  </p>
+</p>
+
+### OSI与TCP/IP模型的比较
+
+- [x] 相同点：
+  > - 1. 都是基于独立的协议栈概念。
+  > - 2. 两者都有功能相似的应用层、传输层、网络层。
+
+- [x] 不同点：
+  > - 1. 在OSI模型中，严格地定义了服务、接口、协议；在TCP/IP模型中，并没有严格区分服务、接口与协议。
+  > - 2. OSI模型支持非连接和面向连接的网络层通信，但在传输层只支持面向连接的通信；TCP/IP模型只支持非连接的网络层通信，但在传输层有支持非连接和面向连接的两种协议可供用户选择。
+  > - 3. TCP/IP模型中不区分、甚至不提起物理层和数据链路层。
+
+### 安全体系结构
+
+- [x] RFC 2828 (Internet Security Glossary)
+- [x] X.800 (Security Architecture for OSI)
+  > - `安全攻击Security Attacks` 损害机构所拥有信息的安全的任何行为
+  > - `安全服务Security Services` 系统提供的对资源进行特殊保护的进程或者通信服务
+  > - `安全机制Security Mechanisms` 设计用于检测、预防安全攻击或者恢复系统的机制
+- [x] 用一种或多种 $\underline{安全机制}$ 来实现 $\underline{安全服务}$ ， $\underline{安全服务}$ 致力于抵御 $\underline{安全攻击}$ 。
+
+### 安全体系结构————安全攻击
+
+- [x] `主动攻击(active attack)` : 更改数据流, 或伪造假的数据流。
+  > - 伪装 Masquerade
+  > - 重放Replay
+  > - 篡改Modification
+  > - 拒绝服务Denial of Service
+
+<p align="center">
+  <img src="./img/主动攻击.png" alt="主动攻击">
+  <p align="center">
+   <span>主动攻击</span>
+  </p>
+</p>
+
+- [x] 被动攻击(passive attack): 对传输进行偷听与监视, 获得传输信息, 但不对通信和数据做任何修改。
+  > = 窃听攻击Eavesdrop
+  > 流量分析Traffic analysis
+  > 破解弱加密的数据流cracking of weakly-encrypted data streams
+
+<p align="center">
+  <img src="./img/被动攻击.png" alt="被动攻击">
+  <p align="center">
+   <span>被动攻击</span>
+  </p>
+</p>
 
 ## 1.3 网络各层的相关安全协议
 
