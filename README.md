@@ -307,7 +307,43 @@
   > - 最小权限：每个进程或者使用者执行任务所需的最小权限集。例如，基于角色的访问控制
   > - 隔离、封装、分层、模块化
 
-####
+### 安全服务与攻击的关系
+
+<p align="center">
+  <img src="./img/安全服务与攻击的关系.png" alt="安全服务与攻击的关系">
+  <p align="center">
+   <span>安全服务与攻击的关系</span>
+  </p>
+</p>
+
+### 安全服务与机制的关系
+
+<p align="center">
+  <img src="./img/安全服务与机制的关系.png" alt="安全服务与机制的关系">
+  <p align="center">
+   <span>安全服务与机制的关系</span>
+  </p>
+</p>
+
+### 网络安全模型：实现端到端的安全通信
+
+<p align="center">
+  <img src="./img/网络安全模型.png" alt="网络安全模型">
+  <p align="center">
+   <span>网络安全模型</span>
+  </p>
+</p>
+
+### 网络访问安全模型：保护信息系统免遭恶意访问
+
+<p align="center">
+  <img src="./img/网络访问安全模型.png" alt="网络访问安全模型">
+  <p align="center">
+   <span>网络访问安全模型</span>
+  </p>
+</p>
+
+
 ## 1.3 网络各层的相关安全协议
 
 ## 1.4 密码学基础知识
