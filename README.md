@@ -383,6 +383,309 @@
 
 ## 1.4 密码学基础知识
 
+### 1. 密码学分类
+
+- [x] 按发展进程或体制分
+  > -  `古典密码Classical Cipher` 基于字符替换的密码，现在已很少使用了，但是它代表了密码的起源
+  > -  `对称密钥体制Symmetric-Key System` 加密密钥和解密密钥相同，这些算法也叫作单钥密码体制(one-key system)
+  > -  `非对称密钥体制Asymmetric-Key System` 加密密钥和解密密钥不同，也叫公钥密码体制(public key system)或双钥密码体制(two-key system)
+
+- [x] 按加密模式分
+  > -  `序列密码Stream cipher` 序列密码 $\underline{按位或字节加密}$ , 也可以称为流密码, 序列密码是手工和机械密码时代的主流。
+  > -  `分组密码block cipher` 分组密码将明文分成 $\underline{固定长度的组}$ , 用同一密钥和算法对每一块加密, 输出也是固定长度的密文。
+
+### 2. 古典密码
+
+- [x] DES(数据加密标准，Data Encryption Standard) 
+  > - 背景
+  > > - 1973年，NBS(后来的NIST, National Institute of Standards and Technology)美国国家标准局 `征集数据加密标准方案`
+  > > - 1974年，IBM的Tuchman和Meyers发明Luciffer加密算法, NBS公布了IBM公司提供的该密码算法，以标准建议的形式在全国范围内征求意见
+  > > - 1977年1月15日, DES正式颁布，供商业界和非国防性政府部门使用，同年7月15日生效
+  > 
+  > - DES是一种对二元数据进行加密的算法，数据分组长度为 `64位` ，密文分组长度也是 `64位` ，使用的密钥为 `64位` ，有效密钥长度为 `56位` ，有 `8位` 用于奇偶校验，解密时的过程和加密时相似，但密钥的顺序正好相反，DES的整个体制是公开的，系统的安全性完全靠密钥的保密。
+
+<p align="center">
+  <img src="./img/DES算法流程.png" alt="DES算法流程">
+  <p align="center">
+   <span>DES算法流程</span>
+  </p>
+</p>
+
+<p align="center">
+  <img src="./img/Single Round of DES Algorithm.png" alt="Single Round of DES Algorithm">
+  <p align="center">
+   <span>Single Round of DES Algorithm</span>
+  </p>
+</p>
+
+#### DES算法的破解
+
+- [x] DES使用了近 25年时间，它具有很强的抗密码分析能力，但它的密钥长度只有 $56比特$ ， $56-bit$ 密钥有 $2^{56} = 72,057,584,037,927,936 ≈ 7.2亿亿$ 之多，随着计算机运算能力的增加，56比特长度的密码系统显得不安全了。
+
+- [x] 1997年，RSA公司发起破译RC4、RC5、MD2、MD5，以及DES的活动，破译DES奖励10000美金。
+  > - 由Roche Verse牵头的工程小组动用了70000多台通过因特网连接起来的 计算机系统，花费了96天找到了密钥。
+  > - 1998年7月，电子前沿基金会花费25万美圆制造的一台机器在不到3天的时间里攻破了DES。
+  > - 1999年在超级计算机上只要22小时！
+
+#### 对称密码的性能
+
+- [x] 安全性能
+  > - 密钥长度
+  > - 分组长度
+  > - 轮数
+  > - 密钥编排函数
+  > - 对密码分析的抵抗能力
+
+- [x] 实现性能
+  > - 计算开销
+  > - 内存利用
+
+#### 对加密系统的攻击
+
+- [x] 未知算法攻击：算法未知，仅从密文进行破译
+
+- [x] 仅知密文攻击(Ciphtext Only Attack，COA)：根据加解密算法和密文进行破译
+
+- [x]  `已知明文攻击(Known Plaintext Attack，KPA)` ：攻击者拥有部分密文和对应的明文，根据算法寻找密钥
+
+- [x]  `选择明文攻击(Chosen Plaintext Attack，CPA)` ：有选择地使用任意明文和与之对应的密文信息，根据算法寻找密钥
+
+- [x]  `选择密文攻击(Chosen Ciphertext Attack，CCA)` ：具有CPA的能力之外，还可以有选择地使用密文和与之对应的明文信息，根据算法寻找密钥
+
+#### 其他算法
+
+- [x] 三重DES
+  > - 使用三个密钥对数据块进行三次DES操作，三重DES有四种模型：
+  > > - DES-EEE3 使用三个不同密钥顺序进行三次加密变换
+  > > - **DES-EDE3** 使用三个不同密钥依次进行加密-解密-加密变换 ( **3DES标准，兼容性考虑** )
+  > > - DES-EEE2 其中密钥K1=K3 顺序进行三次加密变换
+  > > - DES-EDE2 其中密钥K1=K3 依次进行加密-解密-加密变换
+
+- [x] 3DES问题所在
+  > - 算法开销
+  > - 采用64bits分组长度
+
+- [x] AES的出现
+  > - 1997年NIST征集高级加密标准
+  > > - 要求与3DES等同或者更高的安全强度，且效率显著提高。要求块长度为 `128位` ，密钥长度可以是 `128、192、256位`
+  > 
+  > -2001年，两轮评估，最终选择比利时密码学家提出的Rijndael算法，成为正式标准。
+
+- [x] IDEA
+  > - IDEA是国际数据加密算法(International Data Encryption Algorithm)的缩写，是1990年由瑞士联邦技术学院X.J.Lai(来学嘉)和Massey提出的建议标准算法，称作PES(Proposed Encryption Standard)，Lai 和Massey 在1992 年进行了改进，强化了抗差分分析的能力，改称为IDEA ，它也是对 `64bit` 大小的数据块加密的分组加密算法，密钥长度为 `128位` ，它基于“ `相异代数群上的混合运算` ”设计思想算法，用硬件和软件实现都很容易，它比DES在实现上快得多。
+  > - 被推荐使用在 `PGP (Pretty Good Privacy)` 软件中
+  > - 64位明文经128位密钥加密成64位密文，穷举分析需要1038次试探，按每秒100万次计算说，则需要1013年。
+  > - 加密密钥与解密密钥不同，但是从一个主密钥派生出来，因此仍是对称的加密体制，目前尚无可验证的破译方法。算法本身倾向于软件实现，加密速度快。
+
+- [x] Blowfish
+  > - 1993年开发，密钥长度可变，最长可达448位，实际中常采用128位，块长度64
+
+- [x] RC5
+  > - 提出者：Ronald L. Rivest
+  > - 1994年开发，可变轮数，可变长密钥
+  > - 其后续版本RC6是作为AES的候选方案之一
+  > -  `RC4是流密码算法` (密钥生成伪随机比特流，与明文按bit异或)
+
+- [x] CAST-128
+  > - 密钥长度40-128bits可变，每轮的函数互相不同，CAST-256提供更长的密钥长度
+
+#### 几种对称加密算法的比较
+
+<div align="center">
+  <table>
+  <thead>
+    <tr>
+      <th>算法</th>
+      <th>密钥长度</th>
+      <th>轮数</th>
+      <th>数学计算</th>
+      <th>应用</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>DES</td>
+      <td>56</td>
+      <td>16</td>
+      <td>异或、固定S盒</td>
+      <td>SET，Kerberos</td>
+    </tr>
+    <tr>
+      <td>Triple DES</td>
+      <td>112或168</td>
+      <td>48</td>
+      <td>异或、固定S盒</td>
+      <td>PGP，S/MIME</td>
+    </tr>
+    <tr>
+      <td>IDEA</td>
+      <td>128</td>
+      <td>8</td>
+      <td>异或、加法、乘法</td>
+      <td>PGP</td>
+    </tr>
+    <tr>
+      <td>Blowfish</td>
+      <td>可变至448</td>
+      <td>16</td>
+      <td>异或、变长S盒、加法</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>RC5</td>
+      <td>可变至2048</td>
+      <td>可变至255</td>
+      <td>加法、减法、异或、旋转</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>CAST-128</td>
+      <td>40至128</td>
+      <td>16</td>
+      <td>加法、减法、异或、旋转、固定S盒</td>
+      <td>PGP</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+#### 分组密码的工作模式
+
+- [x] 分组密码一次处理一个数据分组。
+
+- [x] 对于较长的明文，在分解成若干个分组之后，采用相同的密钥进行加密，NIST定义了5种工作模式
+  > - 电码本(ECB，Electronic Codebook)模式
+  > - 密码分组链接(CBC，Cipher-block chaining)模式
+  > - 密码反馈(CFB，Cipher feedback)模式
+  > - 输出反馈(OFB，Output Feedback)模式
+  > - 计数器(CRT， Counter)模式
+
+<p align="center">
+  <img src="./img/ECB加密.png" alt="ECB加密">
+  <p align="center">
+   <span>ECB加密</span>
+  </p>
+</p>
+
+<p align="center">
+  <img src="./img/ECB解密.png" alt="ECB解密">
+  <p align="center">
+   <span>ECB解密</span>
+  </p>
+</p>
+
+##### 电码本(ECB, Electronic Codebook)模式
+
+- [x] 直接应用密码算法的工作模式
+
+- [x] 给定明文 $x=x_1x_2 \dots$ ,将它分为 $b$ 比特长的 $x_i$ ， $e_k$ 是加密算法，产生密文分组 $c_i = e_k(x_i)$ ，完整的密文 $c$ 按次序将 $c_i$ 连接起来：即 $c= c_1 c_2 \dots$ 。
+
+- [x] **存在明显缺点：相同的明文加密后得到的密文是相同的** 。
+
+##### 密码分组链接(CBC, Cipher-block chaining)模式
+
+- [x] 给定明文的一个比特串 $x=x_1x_2 \dots$,  $x_i$ 是 $b$ 比特分组， $IV$ 是一个初始向量。
+  > - $c_1 = e_k (x_1⊕IV)$ ，
+  > - $c_2 = e_k (x_2⊕c_1)$ ，
+  > - $c_i = e_k (x_i⊕c_{i-1})$
+
+<p align="center">
+  <img src="./img/CBC加解密.png" alt="CBC加解密">
+  <p align="center">
+   <span>CBC加解密</span>
+  </p>
+</p>
+
+##### 密码反馈(CFB, Cipher FeedBack)模式
+
+- [x] 给定明文的一个比特串 $x=x_1x_2 \dots$ ,  $x_i$ 是 $s$ 比特分组， $IV$ 是一个初始向量。
+  > - $z_1 = e_k (IV)$ ， $c_1 = x_1⊕z_1$ 的 $s$ 位
+  > - $z_2 = e_k (IV 移位||c_1的s位)$ ， $c_2 = x_2⊕z_2$ 的 $s$ 位
+  > - $z_i = e_k (上个移位寄存器内容移位||ci-1 的s位)$ ， $c_i= x_i⊕z_i$ 的 $s$ 位
+
+<p align="center">
+  <img src="./img/CFB加解密.png" alt="CFB加解密">
+  <p align="center">
+   <span>CFB加解密</span>
+  </p>
+</p>
+
+##### 输出反馈(OFB, output-Feedback)模式
+
+- [x] $z_1 = e_k (IV),c_1 = x_1⊕z_1$
+- [x] $z_2 = e_k (z_1),c_2 = x_2⊕z_2$
+- [x] $z_i = e_k (z_{i-1}),c_i = x_i⊕z_i$
+
+<p align="center">
+  <img src="./img/OFB加解密.png" alt="OFB加解密">
+  <p align="center">
+   <span>OFB加解密</span>
+  </p>
+</p>
+
+- [x] $z——1 ,…, z_i,…$ 可以提前计算
+
+##### 计数器(CRT, CounTeR)模式
+
+- [x] 给定计算器初始值 `counter`
+  > - $z_1 = e_k (couter),c_1 = x_1⊕z_1$
+  > - $z_2 = e_k (couter+1),c_2 = x_2⊕z_2$
+  > - $z_i = e_k (couter+i-1),c_i = x_i⊕z_i$
+
+<p align="center">
+  <img src="./img/CRT加解密.png" alt="CRT加解密">
+  <p align="center">
+   <span>CRT加解密</span>
+  </p>
+</p>
+
+### 3. 公开密钥算法
+
+- [x] 对称密码算法问题：
+  > - 密钥管理量问题：潜在通信的两两分别用一对密钥，当用户量增大时，密钥空间急剧增大。
+  > - 对称算法无法实现抗否认需求——数字签名
+
+- [x] 非对称密码体制的基本原则
+  > - 加密能力与解密能力是分开的
+  > - 密钥分发简单
+  > - 需要保存的密钥量大大减少，N个用户只需要N个，除了个人私钥之外，公钥均可以公开保存
+  > - 可满足不相识的人之间保密通信
+  > - 可以实现数字签名
+
+<p align="center">
+  <img src="./img/公开密钥算法加密.png" alt="公开密钥算法加密">
+  <p align="center">
+   <span>公开密钥算法加密</span>
+  </p>
+</p>
+
+<p align="center">
+  <img src="./img/公开密钥算法认证.png" alt="公开密钥算法认证">
+  <p align="center">
+   <span>公开密钥算法认证</span>
+  </p>
+</p>
+
+#### 公开密钥算法基本思想
+
+- [x] 公钥密码又称为双钥密码和非对称密码，1976年由Diffie和Hellman在其邀搞论文“密码学新方向”（ New Directions in Cryptography ）一文中提出的。(2016年图灵奖)
+
+- [x] RSA是1978年MIT的Rivist, Shamir 和Adlemar开发的第一个公钥密码体制，最早提出的满足要求的公钥算法之一。(2002年图灵奖)
+
+#### RSA密码体制基本原理
+
+- [x] A. 密钥的生成
+  > - 选择 $p, q$ ， $p, q$ 为互异素数，计算 $n=p×q$ , $φ(n)=(p-1)(q-1)$ , 选择整数 $e$ 与 $φ(n)$ 互素，即 $gcd(φ(n),e)=1,1<e<φ(n)$ 计算 $d$ ,使 $d=e-1(modφ (n))$ ,公钥 $Pk=\lbrace e, n\rbrace$ ; 私钥 $Sk=\lbrace d, n\rbrace$
+
+- [x] B. 加密 (用e, n)，
+  > - 明文是以分组方式加密的，每一个分组的比特数应小于n的二进制表示，即每一个分组的长度应小于 $\log _2n$
+  > - 明文 $M<n$ ， 密文 $C=M^e(mod n)$ .
+
+- [x] C. 解密 (用d, n)
+  > - 密文C， 明文 $M=C^d (mod n)$
+
+### 4. Diffie-Hellman密钥交换
+
 ## 1.5 数字签名与认证技术
 
 ## 1.6 网络安全的标准组织
