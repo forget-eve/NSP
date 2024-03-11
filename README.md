@@ -368,14 +368,14 @@
 - [x] 应用层：HTTPS, PGP, S/MIME, DNSSEC等
 
 <p align="center">
-  <img src="./img/网络各层的相关安全协议.png" alt="网络各层的相关安全协议">
+  <img src="./img/网络各层的相关安全协议2.png" alt="网络各层的相关安全协议">
   <p align="center">
    <span>网络各层的相关安全协议</span>
   </p>
 </p>
 
 <p align="center">
-  <img src="./img/网络各层的相关安全协议1.png" alt="网络各层的相关安全协议">
+  <img src="./img/网络各层的相关安全协议3.png" alt="网络各层的相关安全协议">
   <p align="center">
    <span>网络各层的相关安全协议</span>
   </p>
