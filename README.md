@@ -610,6 +610,15 @@
   </p>
 </p>
 
+<p align="center">
+  <img src="./img/CFB加解密1.png" alt="CFB加解密">
+  <p align="center">
+   <span>CFB加解密</span>
+  </p>
+</p>
+
+> 参考下面的图，上面那个并不太准确
+
 ##### 输出反馈(OFB, output-Feedback)模式
 
 - [x] $z_1 = e_k (IV),c_1 = x_1⊕z_1$
