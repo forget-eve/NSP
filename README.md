@@ -560,6 +560,14 @@
   > - 输出反馈(OFB，Output Feedback)模式
   > - 计数器(CRT， Counter)模式
 
+##### 电码本(ECB, Electronic Codebook)模式
+
+- [x] 直接应用密码算法的工作模式
+
+- [x] 给定明文 $x=x_1x_2 \dots$ ,将它分为 $b$ 比特长的 $x_i$ ， $e_k$ 是加密算法，产生密文分组 $c_i = e_k(x_i)$ ，完整的密文 $c$ 按次序将 $c_i$ 连接起来：即 $c= c_1 c_2 \dots$ 。
+
+- [x] **存在明显缺点：相同的明文加密后得到的密文是相同的** 。
+
 <p align="center">
   <img src="./img/ECB加密.png" alt="ECB加密">
   <p align="center">
@@ -573,14 +581,6 @@
    <span>ECB解密</span>
   </p>
 </p>
-
-##### 电码本(ECB, Electronic Codebook)模式
-
-- [x] 直接应用密码算法的工作模式
-
-- [x] 给定明文 $x=x_1x_2 \dots$ ,将它分为 $b$ 比特长的 $x_i$ ， $e_k$ 是加密算法，产生密文分组 $c_i = e_k(x_i)$ ，完整的密文 $c$ 按次序将 $c_i$ 连接起来：即 $c= c_1 c_2 \dots$ 。
-
-- [x] **存在明显缺点：相同的明文加密后得到的密文是相同的** 。
 
 ##### 密码分组链接(CBC, Cipher-block chaining)模式
 
