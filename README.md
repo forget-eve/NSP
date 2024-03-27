@@ -1672,6 +1672,15 @@
   </p>
 </p> 
 
+#### IPv6协议
+
+<p align="center">
+  <img src="./img/IPv6协议.png" alt="IPv6协议">
+  <p align="center">
+   <span>IPv6协议</span>
+  </p>
+</p> 
+
 ## 3.3 IPSec中的安全组合（SA）
 ## 3.4 认证头标AH
 ## 3.5 封装安全载荷头标ESP
