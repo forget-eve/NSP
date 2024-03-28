@@ -1676,8 +1676,41 @@
 
 <p align="center">
   <img src="./img/IPv6协议.png" alt="IPv6协议">
+	<br>
+	<br>
+	<img src="./img/IPv6协议1.png" alt="IPv6协议">
   <p align="center">
    <span>IPv6协议</span>
+  </p>
+</p> 
+
+#### IPv6扩展头标顺序
+
+<p align="center">
+  <img src="./img/IPv6扩展头标顺序.png" alt="IPv6扩展头标顺序">
+  <p align="center">
+   <span>IPv6扩展头标顺序</span>
+  </p>
+</p> 
+
+#### Data in TCP/IP
+
+<p align="center">
+  <img src="./img/Data in TCPIP.png" alt="Data in TCP/IP">
+  <p align="center">
+   <span>Data in TCP/IP</span>
+  </p>
+</p> 
+
+#### Data in TCP/IPSec/IP
+
+<p align="center">
+  <img src="./img/Data in TCPIPSecIP1.png" alt="Data in TCP/IPSec/IP">
+	<br>
+	<br>
+	<img src="./img/Data in TCPIPSecIP2.png" alt="Data in TCP/IPSec/IP">
+  <p align="center">
+   <span>Data in TCP/IPSec/IP</span>
   </p>
 </p> 
 
