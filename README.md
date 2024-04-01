@@ -1885,6 +1885,7 @@
 - [x] ESP提供 `数据保密` 、 `无连接完整性(可选，不覆盖IP头标)` 、 `数据源认证` 、 `抗重放攻击`
 
 - [x] ESP采用 `对称密码体制` 加密数据
+
 - [x] ESP使用 `消息认证码(MAC)` 提供认证和完整性保护服务
 
 ### 封装安全载荷头标
@@ -1928,9 +1929,106 @@
 </p> 
 
 ## 3.6 IPSec的传输模式与隧道模式
+
+- [ ] <kbd>传输模式</kbd>
+	> - 在传输模式中，AH和ESP头标被插在IP头标及其他选项(或扩展头标)之后，但在传输层协议之前。为IP载荷提供 `认证、完整性和机密性`
+
+<p align="center">
+  <img src="./img/传输模式.png" alt="传输模式">
+</p> 
+
+- [ ] <kbd>隧道模式</kbd>
+	> - 在隧道模式下，AH或ESP头标插在IP头标之前，另外生成一个新的IP头放在前面，隧道的起点和终点的网关地址就是新IP头的源/目的IP地址
+	> - 保护整个IP分组，提供 `认证、完整性和机密性`
+
+<p align="center">
+  <img src="./img/隧道模式.png" alt="隧道模式">
+</p> 
+
+<p align="center">
+  <img src="./img/IPSec的传输模式与隧道模式.png" alt="IPSec的传输模式与隧道模式">
+	<br>
+	<br>
+	<img src="./img/IPSec的传输模式与隧道模式1.png" alt="IPSec的传输模式与隧道模式">
+  <p align="center">
+   <span>IPSec的传输模式与隧道模式</span>
+  </p>
+</p> 
+
+### IPSec 用例
+
+<p align="center">
+  <img src="./img/IPSec 用例.png" alt="IPSec 用例">
+</p> 
+
+- [x] 优点：
+	> - 对边界所有流量强制实现安全性，内部网络无需关注开销
+	> - 对上层协议、终端用户透明
+	> - 构建安全的虚拟专用网
+
 ## 3.7 IPSec与NAT
-## 3.8 IPSec隧道模式的应用-VPN
+
+- [x] `NAT(Network Address Translation)`
+	> - 其中的NAT-PT通常在防火墙或网关上实现，对过往的IP地址、端口号进行转换
+
+- [x] **具有AH头标或ESP头标的的IP分组不能穿越NAT和NAT-PT**
+	> - 地址的修改使得接收端的AH认证失败
+	> - 上层端口号信息的ESP加密，使得端口无法被得知，无法进行NAT-PT
+	> - 上层TCP/UDP中校验和计算涉及伪头标，包括IP地址和端口，通过ESP认证，校验和字段不能被修改，上层会校验验证失败
+	> - 针对ESP问题，IETF的可行解决方案（建议）：在ESP头标前插入一个UDP头标
+
+## 3.8 IPSec隧道模式的应用————VPN
+
+- [x] <kbd>VPN(Virtual Private Networks)</kbd> `虚拟专网`
+
+- [x] 在虚拟专网中，任意两个节点之间的连接并没有传统专网所需的端到端的物理链路，而是利用某种公众网的资源动态组成的。
+
+- [x] IETF草案理解基于IPSec的VPN为：使用IPSec机制在公共IP网络上仿真出一个私有的广域网
+
+- [x] 是通过隧道技术在公共数据网络上仿真一条点到点的专线技术。
+
+- [x] 所谓虚拟，是指用户不再需要拥有实际的专用线路，而是使用Internet公共线路。所谓专用网络，是指用户可以为自己制定一个最符合自己需求的网络。
+
+- [x] `IPSec VPN` 就是利用 `IPSec` 技术在 `Internet` 上建立的 `VPN` 
+
+### 虚拟专网的用途
+
+<p align="center">
+  <img src="./img/虚拟专网的用途.png" alt="虚拟专网的用途">
+</p> 
+
+> - **背景** ：
+> - 跨国(地区)公司分支机构的LAN互连
+
+> - **实现** ：
+> - 通过隧道技术(协议)和一些认证、加密机制，实现跨越Internet的互连
+
+### LAN间VPN
+
+<p align="center">
+  <img src="./img/LAN间VPN.png" alt="LAN间VPN">
+  <p align="center">
+   <span>LAN间VPN</span>
+  </p>
+</p> 
+
 ## 3.9 IPSec的实现
+
+- [x] **FreeBSD，OpenBSD**
+	> - `KAME`：www.kame.net (不再更新)
+	> - `OpenBSD Doc` ：https://man.openbsd.org/ipsec (继续更新)
+
+- [x] **Linux**
+	> - `FreeS/Wan` ： https://www.freeswan.org/ (不再更新)
+	> - `OpenSwan和StrongsWan` 是 `FreeS/Wan` 的延续:
+	> > - https://www.strongswan.org/ (持续更新)
+	> > - https://www.openswan.org/ (持续更新)
+
+- [x] **Solaris**
+
+- [x] **Cisco IOS (PIX and Routers)**
+
+- [x] **Windows** 
 
 # 第四章：IPSec-IKE   
 # 第五章：SSL/TLS协议  
