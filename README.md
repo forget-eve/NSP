@@ -2124,6 +2124,9 @@
   </p>
 </p> 
 
+> - <a href="https://blog.csdn.net/weixin_42767604/article/details/104248421"><kbd>路由协议</kbd></a>
+> - <a href="[https://blog.csdn.net/weixin_42767604/article/details/104248421](https://blog.csdn.net/weixin_45843450/article/details/105756097#:~:text=IP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%EF%BC%8C%E8%80%8CRouting%20Protocol%EF%BC%88eg.BGP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E4%BC%A0%E8%BE%93%E5%B1%82%E6%88%96%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%8C%E4%BB%96%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%BA%EF%BC%9ARouting,Protocol%E8%B4%9F%E8%B4%A3%E5%AD%A6%E4%B9%A0%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%EF%BC%8C%E8%80%8CRouted%20Protocol%E6%A0%B9%E6%8D%AE%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E5%B0%86%E6%9D%A5%E8%87%AA%E4%B8%8A%E5%B1%82%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B0%81%E8%A3%85%E5%9C%A8IP%E5%8C%85%E9%87%8C%E4%BC%A0%E8%BE%93%E3%80%82)"><kbd>其中距离矢量路由协议工作在网络层，链路状态路由协议工作在传输层或应用层</kbd></a>
+
 ## 4.2 IKEv1协议过程
 
 ## 4.3 IKEv2协议过程
