@@ -1774,7 +1774,7 @@
 
 ### 安全参数索引(SPI)
 
-- [x] **SPI是为了 `唯一标识SA而生成的一个32位整数` ，由 `目的端` 确定。包含在AH头标和ESP头标中，其值 $1～255$ 被IANA留作将来使用，0被保留，目前有效的值为 $256～2^{32}-1$**
+- [x] **SPI是为了 `唯一标识SA而生成的一个32位整数` ，由 `目的端` 确定(不是由源端确定是因为，其根据SAD确认，而由源端确定，则其会根据五元组进行实现，但是每次发送报文的时候，五元组中的源端也会在报文中)。包含在AH头标和ESP头标中，其值 $1～255$ 被IANA留作将来使用，0被保留，目前有效的值为 $256$ ～ $2^{32}-1$**
 	> - 源端通过 $SPI$ 和源端地址 $Addr_S$ ，去 $SAD$ 库中找到唯一的 $SA$ 标头。
 
 - [x] 有了SPI，相同源、目的节点的数据流可以建立多个SA，也可以方便地各自被唯一标识
@@ -2085,6 +2085,44 @@
 # 第四章：IPSec-IKE   
 
 ## 4.1 什么是IKE?
+
+- [x] IKE(Internet Key Exchange, v2： `RFC4306-> RFC5996->RFC7296` )：因特网密钥交换协议，是一个以受保护的方式 `动态协商IPsec SA` 的协议。
+	> - 其他进一步的更新：RFC 8983, RFC 9370, RFC 7427, RFC 7670, RFC 8247
+
+- [x] IKE的功能：使用某种 `长期密钥` 进行双向认证并建立 `短期会话密钥`
+	> - 协商：通信参数，安全特性(可选)(也就是给定几个参数，然后选择其组合，但是这样做比较麻烦，所以后续很多协议相当于只给几种选择，而不给组合)
+	> - 认证通信对端
+	> - 保护实体的标识等(可选)(是否匿名，如果匿名则只需要知道其为合法用户，但是可以不知道是谁，只用认证合法性，并且会话不被第三者发现)
+	> - 用安全的方法产生、交换、建立密钥
+	> - 管理，删除安全关联(SA)
+	> - 长期密钥包括：共享秘密密钥、只用于签名的密钥、用于加密的密钥
+
+### IKE的组成和实现
+
+- [x] 目前存在两个版本
+	> - `第一版本` ， **本质上是一个混合协议(一个框架，两个协议)**
+	> > - Internet 密钥交换协议(IKEv1，RFC2409)
+	> > - Internet安全关联和密钥管理协议(ISAKMP，RFC2408)
+	> > - SKEME: A Versatile Secure Key Exchange Mechanism for Internet
+	> > - IPSec Domain of Interpretation ，(IPSec DOI，RFC2407)
+	> > - Oakley密钥确定协议(RFC2412)
+	> 
+	> - `第二版本` ， **原理和功能基本相同，协议设计上极大优化**
+	> > - Internet密钥交换协议(IKEv2，RFC4306)
+	> > - IKEv2 Clarification and Implementation Guidelines(RFC4718)
+	> > - 后续修订版本： `RFC5996` ，RFC7296
+	> > - 功能细化或者扩展：RFC7427, 7670, 8247, 8983，9370
+
+> 工作在 `应用层`
+
+### IKE Network Placement
+
+<p align="center">
+  <img src="./img/IKE Network Placement.png" alt="IKE Network Placement">
+  <p align="center">
+   <span>IKE Network Placement</span>
+  </p>
+</p> 
 
 ## 4.2 IKEv1协议过程
 
