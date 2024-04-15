@@ -1733,7 +1733,7 @@
 </p> 
 
 - [x] 指明在IPv6报头的所有域中，哪些是不可变的，哪些是可变但可预测的，哪些是可变的(0优先级ICV计算)？
-	> - 不可变:：Version, Payload Length, Next Header (This should be the value forAH.), Source Address, Destination Address (without Routing Extension Header)
+	> - 不可变：Version, Payload Length, Next Header (This should be the value forAH.), Source Address, Destination Address (without Routing Extension Header)
 	> - 可变但可预测：Destination Address (with Routing Extension Header)
 	> - 可变：Class, Flow Label, Hop Limit
 
