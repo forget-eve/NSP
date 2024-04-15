@@ -2403,6 +2403,15 @@
 	> - **Public key encryption**
 	> > - $SKEYID=PRF(hash(Ni|Nr), CKY-i|CKY-r)$
 
+- [x] **SKEYID_d (used to derive keying material for IPsec SA)**
+	> - $SKEYID\underline{}d =PRF(SKEYID, g^{ir}|CKY-i|CKY-r|0)$
+
+- [x] **SKEYID_a (auth key for ISAKMP SA)**
+	> - $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^{ir}|CKY-i|CKY-r|1)$
+
+- [x] **SKEYID_e (enc key for ISAKMP SA)**
+	> - $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^{ir}|CKY-i|CKY-r|2)$
+
 ## 4.3 IKEv2协议过程
 
 # 第五章：SSL/TLS协议  
