@@ -442,9 +442,9 @@
 
 #### 对加密系统的攻击
 
-- [x] 未知算法攻击：算法未知，仅从密文进行破译
+- [x] `未知算法攻击` ：算法未知，仅从密文进行破译
 
-- [x] 仅知密文攻击(Ciphtext Only Attack，COA)：根据加解密算法和密文进行破译
+- [x] `仅知密文攻击(Ciphtext Only Attack，COA)` ：根据加解密算法和密文进行破译
 
 - [x]  `已知明文攻击(Known Plaintext Attack，KPA)` ：攻击者拥有部分密文和对应的明文，根据算法寻找密钥
 
@@ -869,19 +869,19 @@
 	> - 在收发双方建立信任关系，提供身份认证、数字签名、加密等安全服务
 	> - 收发双方不需要事先共享密钥，通过公钥加密传输会话密钥
 
-- [x] 如何在通信双⽅间协商⼀个会话密钥
-	> - 基于对称加密：通过选择⼀个密钥分发中⼼，为通信双⽅提供⼀个会话密钥。如 `Kerberos认证协议`
-	> - 基于⾮对称加密：包括 `Diffie-Hellman密钥交换` ， `数字信封`
+- [x] 如何在通信双方间协商⼀个会话密钥
+	> - 基于对称加密：通过选择⼀个密钥分发中心，为通信双⽅提供⼀个会话密钥。如 `Kerberos认证协议`
+	> - 基于非对称加密：包括 `Diffie-Hellman密钥交换` ， `数字信封`
 
-- [x] 什么是随机数？基于已学课程⼤致描述随机数的作⽤？
-	> - 随机数是⼀种统计上独⽴且⽆偏的⼆进制数字序列
+- [x] 什么是随机数？基于已学课程大致描述随机数的作⽤？
+	> - 随机数是⼀种统计上独立且无偏的二进制数字序列
 	> - 随机数作用:
 	> > - 作为分组密码技术中的密钥
 	> > - 作为流密码技术中的密钥或密钥流
-	> > - ⽤于产⽣公钥密钥算法中的⼤素数、私钥等，如RSA中p和q的选取
-	> > - ⽤于认证协议中防⽌重放攻击
+	> > - ⽤于产生公钥密钥算法中的⼤素数、私钥等，如RSA中p和q的选取
+	> > - ⽤于认证协议中防止重放攻击
 
-> 重放攻击是⼀个攻击者得到了⼀个经过认证的包的副本，稍后⼜将其传送到其希望被传送到的⽬的站点的攻击。
+> 重放攻击是⼀个攻击者得到了⼀个经过认证的包的副本，稍后又将其传送到其希望被传送到的⽬的站点的攻击。
 
 - [x] 非对称密码体制(很多考试都有，还有小测)
 
@@ -1005,7 +1005,7 @@
 - [x] 数字签名在PKI中提供 `数据完整性保护` 和提供 `不可否认性服务` 。
 
 > 注：在考虑源端加密和签名(或进行 `HMAC` )的顺序时，会考虑开支，在本课程中这个顺序一般是一样的，只有一个特例，所以这两个场景(不同顺序的两个场景)考试的时候必会考一个。
-> > 一般采取先采取加密，再进行 `HMAC` ( `sign(E(M))(E(M),sign)` ,反之为 (E(sign(M))` )，因为此时目的端可以通过 `HMAC` 可以知道该消息是否正确，若错误就可以不进行解密，可以进行省略解密步骤(这个建立在加密和 `HMAC` 的开销一致的情况，或加解密的开销小于验证或进行 `HMAC` 的情况)。
+> > 一般采取先采取加密，再进行 `HMAC` ( `sign(E(M))` ,反之为 `(E(sign(M))` )，因为此时目的端可以通过 `HMAC` 可以知道该消息是否正确，若错误就可以不进行解密，可以进行省略解密步骤(这个建立在加密和 `HMAC` 的开销一致的情况，或加解密的开销小于验证或进行 `HMAC` 的情况)。
 > >
 > > 经常性的/频繁触发/周期性的情况，是需要优化的。
 
@@ -1068,10 +1068,10 @@
 ### PKI功能操作概述
 
 - [x] **PKI的运行操作主要经过六个步骤：**
-	> - 1. 端实体向证书机构(CA)提出数字证书申请；
-	> - 2. CA验明端实体身份，并 `签发数字证书` ；
+	> - 1. 端实体向证书机构(CA)提出数字证书申请；
+	> - 2. CA验明端实体身份，并 `签发数字证书` ；
 	> - 3.  `CA将证书公布到证书库` 中；
-	> - 4. 假设为电子邮件应用，端实体对电子邮件数字签名作为发送认证，确保邮件完整性，不可否认性，并发送给接收方。
+	> - 4. 假设为电子邮件应用，端实体对电子邮件数字签名作为发送认证，确保邮件完整性，不可否认性，并发送给接收方。
 	> - 5. 接收方接收邮件，首先获得证书，到证书库查明端实体证书的状态和有效性(在线)，证书库返回证书检查结果( `CRL检查` 等)，验证证书和公钥的绑定关系；
 	> - 6. 用端实体的 `公钥验证数字签名(离线)` 。
 
@@ -1671,13 +1671,6 @@
 
 ## 3.2 IPv4和IPv6协议
 
-<p align="center">
-  <img src="./img/Security Protocol Layers.png" alt="Security Protocol Layers">
-  <p align="center">
-   <span>Security Protocol Layers</span>
-  </p>
-</p> 
-
 ### IPv4协议—Internet的网络层协议
 
 - [x] IPv4协议—Internet的网络层协议(IPv4地址为32位)
@@ -1892,6 +1885,13 @@
 	> - 产生或增加序列号，当一个新的SA建立时，序列号计数器初始化为0，以后每发一个分组，序列号加1
 	> - 计算ICV(完整性校验值)
 	> - 转发分组到目的节点
+
+- [x] **目的端进入处理**
+	> - 如IP分组中无IPSec选项，则分组中的选择符进入SPD查找一条与选择符匹配的策略， $\textcolor{red}{检查策略是否相符}$ 。如果无需进行IPSec处理则放行，否则丢弃
+	> - 使用IP分组头中的 **SPI值** 、目的IP地址以及IPSec协议在进入的SA数据库中查找SA，如果查找失败，则抛弃该分组，并记录事件。
+	> - 使用已查到的SA进行IPSec处理。
+	> - 检查序列号，确定是否为重放分组
+	> - 使用SA指定的MAC算法计算ICV，并与认证数据域中的ICV比较，如果两值不同，则抛弃分组
 
 ### 完整性校验值ICV的计算
 
@@ -2113,7 +2113,7 @@
 	> > - 后续修订版本： `RFC5996` ，RFC7296
 	> > - 功能细化或者扩展：RFC7427, 7670, 8247, 8983，9370
 
-> 工作在 `应用层`
+> 工作在 `应用层` ，现在一般在用 `IKEv3`
 
 ### IKE Network Placement
 
@@ -2124,10 +2124,284 @@
   </p>
 </p> 
 
+> - 为应用层协议。
 > - <a href="https://blog.csdn.net/weixin_42767604/article/details/104248421"><kbd>路由协议</kbd></a>
-> - <a href="[https://blog.csdn.net/weixin_42767604/article/details/104248421](https://blog.csdn.net/weixin_45843450/article/details/105756097#:~:text=IP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%EF%BC%8C%E8%80%8CRouting%20Protocol%EF%BC%88eg.BGP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E4%BC%A0%E8%BE%93%E5%B1%82%E6%88%96%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%8C%E4%BB%96%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%BA%EF%BC%9ARouting,Protocol%E8%B4%9F%E8%B4%A3%E5%AD%A6%E4%B9%A0%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%EF%BC%8C%E8%80%8CRouted%20Protocol%E6%A0%B9%E6%8D%AE%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E5%B0%86%E6%9D%A5%E8%87%AA%E4%B8%8A%E5%B1%82%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B0%81%E8%A3%85%E5%9C%A8IP%E5%8C%85%E9%87%8C%E4%BC%A0%E8%BE%93%E3%80%82)"><kbd>其中距离矢量路由协议工作在网络层，链路状态路由协议工作在传输层或应用层</kbd></a>
+> - <a href="[https://blog.csdn.net/weixin_42767604/article/details/104248421](https://blog.csdn.net/weixin_45843450/article/details/105756097#:~:text=IP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E7%BD%91%E7%BB%9C%E5%B1%82%EF%BC%8C%E8%80%8CRouting%20Protocol%EF%BC%88eg.BGP%EF%BC%89%E5%B7%A5%E4%BD%9C%E5%9C%A8%E4%BC%A0%E8%BE%93%E5%B1%82%E6%88%96%E5%BA%94%E7%94%A8%E5%B1%82%EF%BC%8C%E4%BB%96%E4%BB%AC%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%BA%EF%BC%9ARouting,Protocol%E8%B4%9F%E8%B4%A3%E5%AD%A6%E4%B9%A0%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%EF%BC%8C%E8%80%8CRouted%20Protocol%E6%A0%B9%E6%8D%AE%E6%9C%80%E4%BD%B3%E8%B7%AF%E5%BE%84%E5%B0%86%E6%9D%A5%E8%87%AA%E4%B8%8A%E5%B1%82%E7%9A%84%E4%BF%A1%E6%81%AF%E5%B0%81%E8%A3%85%E5%9C%A8IP%E5%8C%85%E9%87%8C%E4%BC%A0%E8%BE%93%E3%80%82)"><kbd>其中距离矢量路由协议工作在网络层(OSPF)，链路状态路由协议工作在传输层或应用层(BGP(这个为TCP的一种),RIP)</kbd></a>
+
+### IPSec体系结构
+
+<p align="center">
+  <img src="./img/IPSec体系结构.png" alt="IPSec体系结构">
+  <p align="center">
+   <span>IPSec体系结构</span>
+  </p>
+</p>
 
 ## 4.2 IKEv1协议过程
+
+### IKEv1
+
+- [x] 两个阶段
+	> - 第一阶段，为建立IKE本身使用的安全信道而相互交换SA(采用ISAKMP)————ISAKMP SA(双向)
+	> - 第二阶段，利用第一阶段建立的安全信道交换IPSec通信中使用的SA————IPSec SA(单向)
+
+- [x] 一个框架，两个协议
+	> - 使用了ISAKMP框架，希望独立于具体的密钥协商算法
+	> - 部分使用了Oakley协议和SKEME协议(更新时可以不动框架，只用更新两个协议就可以)
+
+### ISAKMP协议
+
+- [x] Internet Security Association and Key Management Protocol ( `RFC 2408` )
+
+- [x] 提供密钥管理架构
+
+- [x] 定义SA的建立、协商、修改、删除规程和分组格式
+
+- [x] 独立于密钥交换协议、加密算法和认证方法（由Oakley密钥确定协议来密钥交换算法）
+
+- [x] 下层由UDP协议承载，端口号为500。
+
+### IKEv1的第一阶段
+
+- [x] 目的：
+	> - 建立ISAKMP SA（安全通道）
+
+- [x] 步骤(交换3、6个报文)
+	> - 协商安全参数
+	> - Diffie-Hellman 交换
+	> - 认证实体
+
+- [x] 交换模式(2种)：
+	> - 主模式(Main Mode)：在 IKE中必须配置主模式
+	> - 野蛮模式(Aggressive Mode)：用来简化规程和提高处理效率
+
+- [x] 认证方式(4种)(基于挑战应答)
+	> - 预先共享密钥(不是对称加密，是 `HMAC` )
+	> - 数字签名(DSS或RSA)
+	> - 公钥加密(RSA或EI-Gamal)
+	> - 修订的公钥加密方式(和上面其实差不多是一种)
+ 	> - **没有对称加密方法**
+
+#### IKEv1第一阶段属性
+
+- [x] **群(group)描述(预先定义)**
+
+- [x] **群类型(协商)**
+	> - 模指数群 MODP(modular exponentiation group)
+	> - 在有限域 $GF[2^N]$ 上定义的椭圆曲线群 `EC2N` (elliptic curve group over  $GF[ 2^N]$ )
+
+- [x] **加密算法**
+	> - 密钥长度
+	> - 分组大小
+
+- [x] **哈希算法**
+
+- [x] **生存时间(秒和/或千字节)**
+
+#### 主模式(Main Mode)
+
+<p align="center">
+  <img src="./img/主模式.png" alt="主模式">
+  <p align="center">
+   <span>主模式</span>
+  </p>
+</p>
+
+#### 野蛮模式(Aggressive Mode)
+
+<p align="center">
+  <img src="./img/野蛮模式.png" alt="野蛮模式">
+  <p align="center">
+   <span>野蛮模式</span>
+  </p>
+</p>
+
+#### 符号说明
+
+- [x] $HDR$ ：一个 `ISAKMP` 头， `HDR*` 表明 `ISAKMP` 后面的载荷是 `加密` 的
+
+- [x] $SA$ ：带有一个或多个建议的安全关联载荷
+
+- [x] $KE$ ：密钥交换载荷
+
+- [x] $IDX$ ：标识载荷， $X=i$ 表示发起者， $X=r$ 表示响应者
+
+- [x] $HASH$ ：杂凑载荷
+
+- [x] $SIG$ ：签名载荷
+
+- [x] $CERT$ ：证书载荷
+
+- [x] $N_X$ ： $X$ 的 `nonce` 载荷， $X$ 为i(发起者)或 $r$ (响应者)
+
+- [x] $<P>\underline{}b$ ：载荷 $P$ 的主体，就是没有通用头的载荷
+
+- [x] $CKY-I(CKY-R)$ ： `ISAKMP` 头中的发起者(响应者) `cookie`
+
+- [x] $gXi$ 或 $gXr$ ：发起者或响应者的 $D-H$ 公开值
+
+- [x] $Prf(key,msg)$ ：使用密钥 $key$ 和输入信息 $msg$ 的伪随机数函数，如 $HMAC$ 。
+
+- [x] $\textcolor{red}{SKEYID}$ ：一个衍生自仅有通信双方知道的秘密密钥信息的密钥串。
+
+- [x] $\textcolor{red}{SKEYID\underline{}e}$ : `ISAKMP` 用来保护它的消息保密性的密钥信息
+
+- [x] $\textcolor{red}{SKEYID\underline{}a}$ : `ISAKMP` 用来认证它的消息的密钥信息
+
+- [x] $\textcolor{red}{SKEYID\underline{}d}$ :用来在第二阶段协商中为非 `ISAKMP SA` 生成密钥的密钥信息
+
+#### IKE payload format
+
+- [ ] IKE head				IKE头(HDR)
+
+- [ ] Generic Payload Header	 	通用载荷头
+
+- [ ] Transform Payload 	 	转换载荷
+
+- [ ] Proposal Payload			提议载荷
+
+- [ ] Security Association Payload	安全关联载荷(SA)
+
+- [ ] Key Exchange Payload		密钥交换载荷
+
+- [ ] Identification Payload    		标识载荷
+
+- [ ] Certificate Payload		证书载荷(CERT)
+
+- [ ] Certificate Request Payload	证书请求载荷
+
+- [ ] Hash Payload			散列载荷
+
+- [ ] Signature Payload		签名载荷
+
+- [ ] Nonce Payload 			Nonce载荷
+
+- [ ] Notification Payload、Delete Payload
+
+#### IKE 缩写
+
+<p align="center">
+  <img src="./img/IKE 缩写.png" alt="IKE 缩写">
+  <p align="center">
+   <span>IKE 缩写</span>
+  </p>
+</p>
+
+#### 主模式：用预共享密钥认证
+
+- [x] 假设A和B进行挑站应答，若只用随机数加密，另一侧解密传回，这样只能进行 `数据源认证` ，不能做到 `用户/实体认证` ，可以加上当前时间戳或者签名信息就可解决。
+- [x] 假设A将数据存在云端，那么由于本地没有数据，怎么确认云端有该数据或者有没有要求删除？
+	- 该问题很矛盾，以往都是云端将要求数据的哈希值传回，认证已经存储，但是在后续，这个哈希是可以提前算并且存储的，所以不能确认当前云端还保留该数据，按理说是可以对其添加时间戳再进行哈希认证，应该是可以解决的。
+
+<p align="center">
+  <img src="./img/主模式：用预共享密钥认证.png" alt="主模式：用预共享密钥认证">
+  <p align="center">
+   <span>主模式：用预共享密钥认证</span>
+  </p>
+</p>
+
+> **上图中 $ID$ 是由另一个密钥进行计算的，而不是两者之间的密钥进行计算。**
+
+- [x] 1和2协商了 `CKY-I,CKY-R` ； `SA` 带有一个或多个建议载荷、变换载荷，确定了加密、认证算法等
+
+- [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥：
+	- $SKEYID=PRF(preshared key, Ni|Nr)$
+	- $SKEYID\underline{}d =PRF(SKEYID, g^ir|CKY-i|CKY-r|0)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e = PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+
+- [x] **由于该密钥是与协商的，所以存在中间人时，是不能用的。**
+
+> - `HDR contains CKY-I | CKY-R` ，是 `ISAKMP` 头标
+> - `SA` 带有一个或多个建议的安全关联载荷。 `Ni/Nr` 是 `nonce` 值(也就是类似初始向量 `IV` 值，也就是 **随机数** )
+> - $KE = g^i (Initiator) \ or \ g^r (Responder)$ ，是密钥交换载荷
+> - `IDii/IDir` 是发起者/响应者的标识载荷
+> - `HASH` 是杂凑载荷
+
+##### 哈希值计算
+
+- [ ] $HASH\underline{}I$ :
+	- $HMAC\underline{}H(SKEYID, g^i | g^r | CKY-I | CKY-R | SA | IDii)$
+
+- [ ] $HASH\underline{}R$ :
+	- $HMAC\underline{}H(SKEYID, g^r | g^i | CKY-R | CKY-I | SA | IDir)$
+
+#### 主模式：用数字签名认证
+
+<p align="center">
+  <img src="./img/主模式：用数字签名认证.png" alt="主模式：用数字签名认证">
+  <p align="center">
+   <span>主模式：用数字签名认证</span>
+  </p>
+</p>
+
+- [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥，但是此时是可以由中间人攻击的，所以有5和6：
+	- $SKEYID=PRF(g^ir, Ni|Nr)$
+	- $SKEYID\underline{}d =PRF(SKEYID, g^ir|CKY-i|CKY-r|0)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+
+- [x] 5和6是基于签名的，否则还是存在 `中间人攻击` 。
+
+> - `HDR contains CKY-I | CKY-R`
+> - $KE = g^i (Initiator) \ or \ g^r (Responder)$
+> - `SIG_I/SIG_R = digital sig of HASH_I/HASH_R`
+> - `CERT` 是证书载荷
+
+#### 主模式：用公钥加密认证
+
+<p align="center">
+  <img src="./img/主模式：用公钥加密认证.png" alt="主模式：用公钥加密认证">
+  <p align="center">
+   <span>主模式：用公钥加密认证</span>
+  </p>
+</p>
+
+> 使用数字信封，不用对端公钥直接加密，是因为这个导致该过程为标准的非对称加密，而非数字信封。
+
+- [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥，但是此时是可以由中间人攻击的，所以有5和6：
+	- $SKEYID=PRFPRF(hash(Ni|Nr), CKY-i|CKY-r)$
+	- $SKEYID\underline{}d =PRF((SKEYID, g^ir|CKY-i|CKY-r|0)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+ 
+> - `HDR contains CKY-I | CKY-R`
+> - $KE = g^i (Initiator) \ or \ g^r (Responder)$
+> - 这里 `nonce` 是通过加密传输的，因此可作为共享密钥，HASH值就可以直接用来认证对方的身份，抵抗中间人攻击。
+
+##### 用公钥加密认证中存在的问题
+
+- [x] 问题
+	- 采用了四次公钥加/解密操作(加密ID和随机数)，耗费计算资源，与签名认证算法相比，多了两次加/解密
+
+- [x] 修改方法
+	- 采用修正的公钥加密认证
+
+#### 主模式: 改进的公钥加密认证
+
+<p align="center">
+  <img src="./img/主模式：改进的公钥加密认证.png" alt="主模式：改进的公钥加密认证">
+  <p align="center">
+   <span>主模式：改进的公钥加密认证</span>
+  </p>
+</p>
+
+> - `HDR contains CKY-I | CKY-R`
+> - $KE = g^i (Initiator) or g^r (Responder)$
+> - `Ki = prf(Ni, CKY-I), Kr = prf(Nr, CKY-R)`
+
+##### 密钥推导
+
+- [x] **SKEYID**
+	> - **Pre-shared keys**
+	> > - $SKEYID=PRF(preshared key, Ni|Nr)$
+	> > - SKEYID是从预共享密钥推导得到，并且总是与Ni/Nr有关，这样即使采用相同的预共享密钥，不同的Ni/Nr产生的SKEYID是不同的。
+	>
+	> - **Digital signatures** 
+	> > - $SKEYID=PRF(Ni|Nr, g^{ir})$
+	> 
+	> - **Public key encryption**
+	> > - $SKEYID=PRF(hash(Ni|Nr), CKY-i|CKY-r)$
 
 ## 4.3 IKEv2协议过程
 
