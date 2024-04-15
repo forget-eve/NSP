@@ -1024,7 +1024,7 @@
 
 ### 数字信封(重点)
 
-- [x] 信息发送端采用 <strong><kbd>接收端的公钥</kbd></strong> ，将一个通信密钥（即对称加密使用的对称密钥）就行加密，生成一个 <strong><kbd>数字信封</kbd></strong> 。
+- [x] 信息发送端采用 <strong><kbd>接收端的公钥</kbd></strong> ，将一个通信密钥（即对称加密使用的对称密钥）进行加密，生成一个 <strong><kbd>数字信封</kbd></strong> 。
 
 - [x] 接收端用 <strong><kbd>己方私钥</kbd></strong> 对数字信封进行解密操作, 获取该 <strong><kbd>对称密钥</kbd></strong> , 用它来解密收到的基于对称加密的加密信息。
 
