@@ -2407,10 +2407,26 @@
 	> - $SKEYID\underline{}d =PRF(SKEYID, g^{ir}|CKY-i|CKY-r|0)$
 
 - [x] **SKEYID_a (auth key for ISAKMP SA)**
-	> - $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^{ir}|CKY-i|CKY-r|1)$
+	> - $SKEYID\underline{}a =PRF(SKEYID, SKEYID\underline{}d|g^{ir}|CKY-i|CKY-r|1)$
 
 - [x] **SKEYID_e (enc key for ISAKMP SA)**
-	> - $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^{ir}|CKY-i|CKY-r|2)$
+	> - $SKEYID\underline{}e =PRF(SKEYID, SKEYID\underline{}a|g^{ir}|CKY-i|CKY-r|2)$
+
+### IKEv1第二阶段
+
+- [x] **目的** ：
+	- 建立IPSec SA，一个第1阶段的SA可以用于建立多个第2阶段的SA。
+
+- [x] **步骤(3报文交换)**
+	- 协商安全参数
+	- 可选的Diffie-Hellman交换
+	- 可选的身份(Identity)交换
+
+- [x] **快速模式(Quick Mode)**
+
+- [x] **新群模式(New Group Mode)，需要时才使用**
+
+
 
 ## 4.3 IKEv2协议过程
 
