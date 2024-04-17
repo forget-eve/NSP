@@ -2307,8 +2307,8 @@
 - [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥：
 	- $SKEYID=PRF(preshared key, Ni|Nr)$
 	- $SKEYID\underline{}d =PRF(SKEYID, g^ir|CKY-i|CKY-r|0)$
-	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
-	- $SKEYID\underline{}e = PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID\underline{}d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e = PRF(SKEYID, SKEYID\underline{}a|g^ir|CKY-I|CKY-R|2)$
 
 - [x] **由于该密钥是与协商的，所以存在中间人时，是不能用的。**
 
@@ -2338,8 +2338,8 @@
 - [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥，但是此时是可以由中间人攻击的，所以有5和6：
 	- $SKEYID=PRF(g^ir, Ni|Nr)$
 	- $SKEYID\underline{}d =PRF(SKEYID, g^ir|CKY-i|CKY-r|0)$
-	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
-	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID\underline{}d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID\underline{}a|g^ir|CKY-I|CKY-R|2)$
 
 - [x] 5和6是基于签名的，否则还是存在 `中间人攻击` 。
 
@@ -2362,8 +2362,8 @@
 - [x] 3和4交换了 $g^i,g^r$ 和 $Ni,Nr$ 生成密钥，但是此时是可以由中间人攻击的，所以有5和6：
 	- $SKEYID=PRFPRF(hash(Ni|Nr), CKY-i|CKY-r)$
 	- $SKEYID\underline{}d =PRF((SKEYID, g^ir|CKY-i|CKY-r|0)$
-	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID_d|g^ir|CKY-I|CKY-R|1)$
-	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID_a|g^ir|CKY-I|CKY-R|2)$
+	- $SKEYID\underline{}a =PRF(SKEYID, SKEYID\underline{}d|g^ir|CKY-I|CKY-R|1)$
+	- $SKEYID\underline{}e =PRF(SKEYID, SKEYID\underline{}a|g^ir|CKY-I|CKY-R|2)$
  
 > - `HDR contains CKY-I | CKY-R`
 > - $KE = g^i (Initiator) \ or \ g^r (Responder)$
@@ -2415,18 +2415,48 @@
 ### IKEv1第二阶段
 
 - [x] **目的** ：
-	- 建立IPSec SA，一个第1阶段的SA可以用于建立多个第2阶段的SA。
+	- 建立IPSec SA(双向)，一个第1阶段的SA可以用于建立多个第2阶段的SA。
 
 - [x] **步骤(3报文交换)**
 	- 协商安全参数
-	- 可选的Diffie-Hellman交换
+	- 可选的Diffie-Hellman交换(前向安全性，保证之前密钥的安全性)
 	- 可选的身份(Identity)交换
 
-- [x] **快速模式(Quick Mode)**
+- [x] **快速模式(Quick Mode)(主要使用)**
 
 - [x] **新群模式(New Group Mode)，需要时才使用**
 
+#### 阶段二属性
 
+- [x] 群描述(for PFS，perfect forward secrecy)
+
+- [x] 加密算法
+	> - 密钥长度
+	> - Key rounds
+
+- [x] 认证算法
+
+- [x] 生存时间(秒和/或千字节)
+
+- [x] 加密模式(传输或隧道)
+
+#### 快速模式
+
+<p align="center">
+  <img src="./img/快速模式.png" alt="快速模式"
+</p>
+
+> - `HDR contains CKY-I|CKY-R`
+> -  $KE (for \ PFS) = g^I (Initiator) or g^r (Responder)$
+> - `HASH(1)=PRF(SKEYID_a|Message_ID|SA|Ni[|KE][|IDi2|IDr2])`
+> - `HASH(2)=PRF(SKEYID_a|Message_ID|Ni|SA|Nr[|KE][|IDi2|IDr2])`
+> - `HASH(3)=PRF(SKEYID_a|0|Message_ID|Ni|Nr)`
+
+##### 密钥推导
+
+- [x] $KEYMAT(no \ PFS)=PRF(SKEYID\underline{}d, protocol | SPI | Ni | Nr)$
+
+- [x] $KEYMAT(with \ PFS)=PRF(SKEYID\underline{}d, g^{ir} | protocol | SPI | Ni | Nr)$
 
 ## 4.3 IKEv2协议过程
 
