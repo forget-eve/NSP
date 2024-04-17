@@ -1887,7 +1887,7 @@
 	> - 转发分组到目的节点
 
 - [x] **`目的端进入处理`**
-	> - 如IP分组中无IPSec选项，则分组中的选择符进入SPD查找一条与选择符匹配的策略， $\textcolor{red}{检查策略是否相符}$ 。如果无需进行IPSec处理则放行，否则丢弃
+	> - 如IP分组中无IPSec选项，则分组中的选择符进入SPD查找一条与选择符匹配的策略， $\color{red}{检查策略是否相符}$ 。如果无需进行IPSec处理则放行，否则丢弃
 	> - 使用IP分组头中的 **SPI值** 、目的IP地址以及IPSec协议在进入的SA数据库中查找SA，如果查找失败，则抛弃该分组，并记录事件。
 	> - 使用已查到的SA进行IPSec处理。
 	> - 检查序列号，确定是否为重放分组
@@ -2242,13 +2242,13 @@
 
 - [x] $Prf(key,msg)$ ：使用密钥 $key$ 和输入信息 $msg$ 的伪随机数函数，如 $HMAC$ 。
 
-- [x] $\textcolor{red}{SKEYID}$ ：一个衍生自仅有通信双方知道的秘密密钥信息的密钥串。
+- [x] $\color{red}{SKEYID}$ ：一个衍生自仅有通信双方知道的秘密密钥信息的密钥串。
 
-- [x] $\textcolor{red}{SKEYID\underline{}e}$ : `ISAKMP` 用来保护它的消息保密性的密钥信息
+- [x] $\color{red}{SKEYID\underline{}e}$ : `ISAKMP` 用来保护它的消息保密性的密钥信息
 
-- [x] $\textcolor{red}{SKEYID\underline{}a}$ : `ISAKMP` 用来认证它的消息的密钥信息
+- [x] $\color{red}{SKEYID\underline{}a}$ : `ISAKMP` 用来认证它的消息的密钥信息
 
-- [x] $\textcolor{red}{SKEYID\underline{}d}$ :用来在第二阶段协商中为非 `ISAKMP SA` 生成密钥的密钥信息
+- [x] $\color{red}{SKEYID\underline{}d}$ :用来在第二阶段协商中为非 `ISAKMP SA` 生成密钥的密钥信息
 
 #### IKE payload format
 
