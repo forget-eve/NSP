@@ -2458,7 +2458,149 @@
 
 - [x] $KEYMAT(with \ PFS)=PRF(SKEYID\underline{}d, g^{ir} | protocol | SPI | Ni | Nr)$
 
+#### 新群模式
+
+- [x] 用于在第一阶段后协商新的群参数信息
+
+<p align="center">
+  <img src="./img/新群模式.png" alt="新群模式">
+</p>
+
+### IKEv1 总结
+
+<p align="center">
+  <img src="./img/IKEv1总结.png" alt="IKEv1 总结">
+  <p align="center">
+   <span>IKEv1 总结</span>
+  </p>
+</p>
+
 ## 4.3 IKEv2协议过程
+
+### 第二版本出现的原因
+
+- **新的考虑**
+	- [x] NAT穿越
+	- [x] EAP中使用的Legacy Authentication(password-based)
+	- [x] 移动场景下的远程地址获取(MOBIKE协议)
+
+- **旧的重新思考**
+	- [x] 原有的标准所提供的部分功能在实际中很少使用，甚至根本就未使用， $\color{red}{数据结构和协议存在进一步简化的空间}$
+	- [x] 高强度的密钥在提供高安全性的同时，对计算也带来了负担，有必要在是实现时考虑尽量 $\color{red}{避免使用大强度的密钥和减少频繁协商的次数}$
+	- [x] 安全关联建立需要经过多轮协商，为节省通信资源， $\color{red}{应该减少和简化交互次数}$ ，从而提供IKE的效率
+
+### IKEv2的组成与实现
+
+- **RFC4306，修订版：RFC5996，RFC7296**
+
+- **在V1基础的修改**
+	- [x] 继续尝试以一个文档来描述方案，但实际也未完全做到
+	- [x] 将IKEv1中的第一阶段的8种交换(4种认证方式*2种交换模式)简化为IKEv2中初始交换只包含4个消息
+	- [x] 两个阶段，但名称和方式有所改变(IKE2：IKE SA，Child SA2)，消息精简
+	- [x] 优化认证方式，证机制中的修改只影响单一的一个认证载荷，而非重构整个交换
+	- [x] 去掉一些不需要的字段，定义了新的载荷，并对部分载荷进行重新定义
+	- [x] 通过 $\color{red}{消息成对(请求和确认)+使用序列号}$ ，使得协议更加可靠，从而降低可能的错误状态
+	- [x] 无SA生存时间的协商，每个节点上各自强制执行自身的生存时间策略
+	- [x] Rekey的操作可以由任意一方在任何时候发起， `IKE SA` 和 `Child SA` 均可以 `Rekey`
+	- [x] Cookie实现机制被修改
+	- [x] 支持NAT-T、扩展认证、远程地址获取等等	
+
+### IKEv2的组成和实现
+
+- **基本概念**
+	- **所有的IKE通信都是由 $\color{red}{\mathbf{消息对组成}}$ ：请求和应答**。消息对被称为“ **交换** ”。这样设计的好处是可以保证可靠性。如果响应在一个超时间隔内没有收到的话，请求者可以重新发送该请求，或者断开链接。
+
+- **IKEv2包含三个阶段**：
+	- **初始交换阶段** ：建立IKE本身使用的安全信道而相互交换 `SA——IKE SA` (双向)和最初的 `CHILD_SA` ，包含两对消息： `IKE_SA_INIT` 、 `IKE_AUTH`
+	- **CREATE_CHILD_SA阶段** ：更新 `IKE SA` ，或者更新和创建一个新的 `CHILD_SA` ，一对消息
+	- **INFORMATIONAL交换阶段** ：用于删除 `SA` ，发送错误通知，检查 `IKE_SA` ，一对消息的存活性等。
+
+<p align="center">
+  <img src="./img/IKEv2的组成和实现.png" alt="IKEv2的组成和实现">
+</p>
+
+### 初始交换
+
+- [x] IKE通信过程总是从 `IKE_SA_INIT` 交换和 `IKE_AUTH` 交换开始，这两个初始交换包含4个消息。
+
+- [x] 第一对消息用于 `IKE_SA_INIT` 交换，用来协商加密算法、(可选地)指示信任的CA名字、交换现时值(Nonce))和实现 `Diffie-Hellman` 交换，该过程建立 `IKE_SA` 。
+	- 如果响应者指示没有一个密码套件建议是可以接受的，或者发起者选择的Diffie-Hellman 组不是响应者选择的组等情况时，这对消息可以重发。
+
+- [x] 第二对消息用于 `IKE_AUTH` 交换，用来认证先前的消息，交换标识符和证书，并且建立第一个 `CHILD_SA` 用于 `AH` 或者 `ESP` 中的 `IPSec SA` 。
+	- 这对消息是通过 `IKE_SA_INIT` $\color{red}{交换建立的密钥来加密和完整性保护}$ ，因此标识符是可以被隐藏身份以防止窃听，并且在消息中的字段都是基于完整性保护的手段可以被认证的
+
+#### 初始交换的三种认证方式
+
+- **基于预共享密钥的MAC**
+
+- **数字签名，包括RSA和DSS**
+
+- **EAP(Extensible Authentication Protocol)方法**
+	- [x] 涉及两种认证方法的组合
+		> - EAP方法：实现作为服务器的一侧对作为客户端一侧的认证
+		> - 公钥签名方法：实现作为客户端的一侧对作为服务器一侧的认证
+
+### Create_Child_SA交换
+
+- [x] 用于创建新的 `Child_SA` 、或 `IKE_SA` 和 `Child_SA` 的密钥更新。
+
+- [x] 由单一的请求/响应对构成，可在初始交换之后由 `IKE_SA` 的任何一端发起，因而这里的发起者指的是发送 `CREATE_CHILD_SA` 请求的端点。
+
+- [x] 分类
+	- `创建一个新的CHILD_ SA`
+		> - $I \rightarrow R:  HDR, SK \lbrace SA, Ni,[g^i,]TSi, TSr\rbrace$
+		> - $R \rightarrow I:  HDR, SK \lbrace SA, Nr, [g^r,]TSi, TSr\rbrace$
+	- `IKE_SA重置密钥`
+		> - $I \rightarrow R:  HDR, SK \lbrace SA, Ni, g^i\rbrace$
+		> - $R \rightarrow I:  HDR, SK \lbrace SA, Nr, g^r\rbrace$
+	- `CHILD_SA重置密钥`
+		> - $I \rightarrow R:  HDR, SK \lbrace N(REKEY_SA), SA, Ni, [g^i,]TSi, TSr\rbrace$
+		> - $R \rightarrow I:  HDR, SK \lbrace SA, Nr, [g^r,] TSi, TSr\rbrace$
+
+- [x] 用于创建新的 `Child_SA` 、或 `IKE_SA` 和 `Child_SA` 的密钥更新。
+
+- [x] 由单一的请求/响应对构成，可在初始交换之后由 `IKE_SA` 的任何一端发起，因而这里的发起者指的是发送 `CREATE_CHILD_SA` 请求的端点。
+
+- [x] 对 `Child_SA` 密钥产生和更新
+	> - $KEYMAT=prf+(SK_d, Ni|Nr)$ 相关密钥依次截取(无PFS)
+	> - $KEYMAT=prf+(SK_d, g^ir(new)|Ni|Nr)$ (有PFS
+
+- [x] 更新 `IKE_SA` 密钥
+	> - $SKEYSEED=prf+(SK_d(old), g^ir(new)|Ni|Nr)$
+
+> $\color{purple}{PFS(Perfect Forward Secrecy)完美的前向安全性，是一种安全特性，由于密钥间没有直接派生关系，即使一个密钥被破解，并不影响其他密钥的安全性。}$
+
+### Informational 交换
+
+- [x] 用于在 `IKE_SA` 操作的任何阶段，由于错误或者事件通知的需要，任何一端都可能向另外一端发送控制消息。
+
+- [x] 用于删除 `SA` ，发送错误通知，检查 `IKE_SA` 的存活性等。
+
+- [x] 发生在初始交换之后，使用协商的密钥对消息进行加密保护
+	- $I \rightarrow R:  HDR, SK \lbrace [N,] [D,] [CP,] ...\rbrace$
+	- $R \rightarrow I:  HDR, SK \lbrace [N,] [D,] [CP,] ...\rbrace$
+
+### 改进的Deffie-Hellman交换
+
+- [x] 传统的D-H交换存在DoS攻击、重放攻击和中间人攻击的风险
+
+- [x] DoS攻击的应对
+	- `IKEv2的固定头标中包含各8字节的发起者SPI和响应者SPI` ，可以用来标识SA，也可以标识进行消息交换的一对节点。对于来自具有相同SPI值的节点的请求，一段时间内，系统将只处理一次，而把其他的请求作为重复数据丢弃
+	- `通过定义携带Cookie的辅助交换` (Cookie包含在公告载荷中)来抵御常见的来自虚假地址的DoS攻击
+	- `IKEv2中消息成对出现` ，在每对消息中，发起方负责重传事件，响应者不必对响应消息进行重传，除非受到重传请求。这样可以避免同时发生重传，造成资源的浪费，同时也可以防止攻击者截获消息后，伪装成发起者不断发起重传请求，耗费协商双方的资源
+	- `IKEv2只通过两种情况判断对方是否失效` ：一种是重复尝试联系对方，直到应答时间过期；另外一种是受到对方的不同的IKE_SA加密保护的INITIAL_CONTACT通知消息
+
+- [x] 传统D-H交换存在DoS攻击、重放攻击和中间人攻击的风险
+
+- [x] 重放攻击的应对
+	- 现时载荷被加到第3和第4个消息(也就是 `IKE_AUTH` 交换的两个消息)中，来保持信息的更新。
+	- 消息ID也主要设计用于防止重放攻击。
+
+- [x] 中间人攻击的应对
+	- 三种认证方式
+
+
+
 
 # 第五章：SSL/TLS协议  
 # 第六章：防火墙与NAT
