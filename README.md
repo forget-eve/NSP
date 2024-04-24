@@ -2998,7 +2998,7 @@ server_write_IV = MD5(ServerHello.random || ClientHello.random) [0, …, 7]
 	- [x] 低比特位数的加密算法(出口限制)
 
 - **数字签名问题**
-	- [x]没有数字签名，不能抗抵赖
+	- [x] 没有数字签名，不能抗抵赖
 
 ## 5.4 SSL的应用
 
