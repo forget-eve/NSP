@@ -2680,6 +2680,8 @@
   <img src="./img/SSL协议族概述3.png" alt="SSL/TLS协议栈">
 </p>
 
+## 5.2 SSL体系结构与协议
+
 ### SSL的工作原理
 
 - [x] 采用 $\underline{\color{red}{握手协议}}$ 建立客户与服务器之间的安全通道，该协议包括双方的相互认证，交换密钥参数
@@ -2690,7 +2692,7 @@
 
 - [x] 采用 $\underline{\color{red}{记录协议}}$ 封装以上三种协议或应用层数据(记录类型：20=改变密码规格，21=告警，22=握手，23=应用层数据)
 
-#### 记录协议中的记录头(Head)
+### 记录协议中的记录头(Head)
 
 - [x] ContentType; —— 8位，上层协议类型
 
@@ -2718,7 +2720,7 @@
 
 > $\color{red}{注：序列号初始为0，随着数据包累加1，不需要进行传输！}$
 
-#### SSL 握手协议
+### SSL 握手协议
 
 - <kbd>allows server & client to</kbd> :
 	- `authenticate each other`
@@ -2731,12 +2733,239 @@
 	- `Client Authentication and Key Exchange`
 	- `Finish`
 
-##### SSL 握手协议(RSA方式)
+#### SSL 握手协议(RSA方式)
 
+<p align="center">
+  <img src="./img/SSL 握手协议.png" alt="SSL 握手协议(RSA方式)">
+</p>
 
-## 5.2 SSL体系结构与协议
+#### 会话重用
+
+- [x] SSL/TLS认为会话通常是具有较长的生命期，在此之上需要在会话基础上容易派生出多个连接。这是因为协议被设计为能够与HTTP协议协同工作，而HTTP协议能够在相同客户和服务器之间打开大量的TCP连接
+
+- [x] 一次一密的会话主密钥是使用开销较大的公开密钥密码技术建立起来的，通过发送包括nonce握手消息的方式，能够 $\color{red}{在主密钥的基础上派生出多个连接中使用的相关密钥}$ 。
+
+##### 会话重用(未进行会话重用的情况)
+
+<p align="center">
+  <img src="./img/会话重用1.png" alt="会话重用（未进行会话重用的情况）">
+</p>
+
+##### 会话重用(进行重用的情况)
+
+<p align="center">
+  <img src="./img/会话重用2.png" alt="会话重用（进行重用的情况）">
+</p>
+
+- Bob返回相同的Session代表同意会话重用，返回不同的Session则和未进行重用的情况一样操作
+
+#### 密钥的计算
+
+- [x] 秘密值 $S$ ：预主密钥(Pre-master secret)
+
+- [x] 主密钥(Master secret) $K：K=f(S，Ra，Rb)$
+
+- [x] 对于每个连接，每个方向上各三个密钥，分别为加密密钥、完整性保护密钥、 $IV：gi(K，Ra，Rb)$
+
+##### 密钥派生流程和关系
+
+<p align="center">
+  <img src="./img/密钥派生流程和关系.png" alt="密钥派生流程和关系">
+  <p align="center">
+   <span>密钥派生流程和关系</span>
+  </p>
+</p>
+
+#### SSL 中 Master Key(主密钥) 生成方式
+
+- **`SSL 3.0`** ( $\color{red}{48字节}$ )
+
+```SSL 3.0
+master_secret =
+MD5(pre_master_secret‖SHA-1('A'‖pre_master_secret||
+         ClientHello.random ‖ServerHello.random)) ‖
+MD5(pre_master_secret‖SHA-1('BB'‖pre_master_secret||
+         ClientHello.random ‖ServerHello.random)) ‖
+MD5(pre_master_secret‖SHA-1('CCC'‖pre_master_secret||
+         ClientHello.random ‖ServerHello.random))
+```
+
+#### TLS 中 Master Key 生成方式
+
+- **`TLS 1.0`** ( $\color{red}{48字节}$ )
+	- <kbd><strong>master_secret = PRF(pre_master_secret, “master secret” , ClientHello.random+ ServerHello.random)[0..47]</strong></kbd>
+	- **PRF(secret, label, seed)为伪随机函数**
+		> - <kbd>P_hash(secret, seed) = HMAC_hash(secret, A(1) || seed) ||  HMAC_hash(secret, A(2) || seed) ||  HMAC_hash(secret, A(3) || seed) || …</kbd>
+		> - <kbd>A(0) = seed;A(i) = HMAC_hash(secret, A(i-1))</kbd>
+		> - <kbd>PRF(secret, label, seed) = P_MD5(secret, label || seed) XOR  P_SHA-1(secret, label || seed)</kbd>
+
+#### SSL中其他密钥的生成
+
+- [x] 包括加密密钥、完整性保护密钥、IV(共6个)
+
+- [x] 过程：
+	- 首先由 `master secret` 计算 `Key Block` ；
+	- 再由 `Key Block` 计算各个密钥。
+
+- [x] **`Key Block` 计算**
+	- <kbd>key_block = MD5(master_secret || SHA(“A”|| master_secret ||ClientHello.random || ServerHello.random)) ||MD5(master_secret || SHA(“BB”|| master_secret ||ClientHello.random || ServerHello.random)) ||MD5(pre_master_secret || SHA(“CCC”|| pre_master_secret || ClientHello.random || ServerHello.random)) || …</kbd>
+
+- [x] **相关参数** 
+	- <kbd>client_write_MAC_secret [CipherSpec.hash_size]</kbd>：Client完整性保护密钥长度
+	- <kbd>server_write_MAC_secret [CipherSpec.hash.size]</kbd>：Server端完整性保护密钥长度
+	- <kbd>client_write_secret [CipherSpec.key_material]</kbd>：Client加密密钥长度
+	- <kbd>server_write_secret [CipherSpec.key_material]</kbd>：Server端加密密钥长度
+
+##### SSL中其他密钥的生成(示例，有出口限制)
+
+- [x] SSL_RSA_ `EXPORT` _WITH_RC2_CBC_40_MD5 
+
+- [x] 选用密钥块的次序( `40bits` )
+	- <kbd>client_write_MAC_secret = key_block[0,…,15]</kbd>
+	- <kbd>server_write_MAC_secret = key_block[16,…,31]</kbd>
+	- <kbd>client_write_key = key_block[32,…,36]</kbd>
+	- <kbd>server_write_key = key_block[37,…,41]</kbd>
+
+- [x] 相关密钥和参数生成( `128bits` )
+final_client_write_key = MD5(client_write_key || ClientHello.random ||     
+                     ServerHello.random) [0. …, 15] 
+final_server_write_key = MD5(server_write_key || ServerHello.random ||
+                     ClientHello.random) [0, …, 15] 
+client_write_IV = MD5(ClientHello.random || ServerHello.random) [0, …, 7] 
+server_write_IV = MD5(ServerHello.random || ClientHello.random) [0, …, 7]
+
+#### 密钥交换算法
+
+- [x] 在 **hello** 消息中，双方交换随机数以及各种算法
+
+- [x] 两类密钥交换算法
+	- **RSA** ，客户产生一个48字节的 `pre_master_secret` ，然后通过服务器的公钥传递给服务器
+	- **Diffie-Hellman** ，双方协商得到的密钥被用作 `pre_master_secret` (包括固定、暂态、匿名三种)
+
+- [x] 再从 `pre_master_secret` 计算得到 `master_secret`
+
+- [x] `master_secret` **总是** $\color{red}{48字节长}$ ，而 `pre_master_secret` 长度不定，取决于密钥交换算法
+
+#### 完整SSL会话握手协议
+
+- [x] 建立安全连接请求，包括协议版本、会话ID、密码构建、压缩方法和初始随机数
+
+- [x] 服务器发送证书、密钥交换证书和证书请求，最后发送hello消息阶段结束的信号
+
+- [x] 如果有证书请求，客户端发送证书。之后客户端发送密钥交换数据，也可以发送证书验证消息
+
+- [x] 更改密码构建和结束握手消息
+
+<p align="center">
+  <img src="./img/完整SSL会话握手协议.png" alt="完整SSL会话握手协议">
+  <p align="center">
+   <span>完整SSL会话握手协议</span>
+  </p>
+</p>
+
+##### 第一阶段：建立起安全协商
+
+<p align="center">
+  <img src="./img/第一阶段：建立起安全协商.png" alt="第一阶段：建立起安全协商">
+</p>
+
+- [x] 客户发送一个client_hello消息，包括以下参数：版本、 `随机数` (32位时间戳+28字节随机序列，TLS1.3中为32字节随机数)、 `会话ID` 、客户支持的密码算法列表(CipherSuite)、客户支持的压缩方法列表
+
+- [x] 然后，客户等待服务器的server_hello消息
+
+- [x] 服务器发送server_hello消息，参数：客户建议的低版本以及服务器支持的最高版本、 `服务器端随机数` 、 `SessionID(考虑会话重用)` 、服务器从客户建议的密码算法中挑出一套、服务器从客户建议的压缩方法中挑出一个
+
+###### CipherSuite
+
+- **指定了密钥交换的方法，SSL支持以下一些方法** ：
+	- RSA，要求服务器提供一个RSA证书
+	- 固定DH(Fixed Diffie-Hellman)，要求服务器的证书中包含了由CA签名的DH公开参数。客户或者在证书中提供DH公开参数，或者在密钥交换消息中提供此参数
+	- EDH(Ephemeral Diffie-Hellman)，产生临时的密钥，DH公开参数由发送者的私钥进行签名，接收者用对应的公钥进行验证(出口限制造成的)
+	- 匿名的DH，不加鉴别。会受到中间人攻击
+
+- **再指定以下信息**
+	- 加密算法和类型(流还是分组密码算法)
+	- HMAC： MD5还是SHA-1(SHA???)
+	- 是否可出口
+	- HashSize
+	- Key Material
+	- IV Size(CBC模式下初始向量的大小)
+
+##### 第二阶段：服务器认证和密钥交换
+
+- [x] 服务器发送 `certificate` 消息，消息包含一个 **X.509** 证书，或一条证书链
+	- 除了匿名 **DH** 之外的密钥交换方法都需要
+
+- [x] 服务器发送 `server_key_exchange` 消息
+	- 可选的，有些情况下可以不需要(固定DH、使用RSA密钥交换)。
+		> - 匿名DH
+		> - 暂态DH
+		> - 服务器长期密钥只能用于签名时，签发一个临时的长度较短的密钥
+	- 消息包含签名，被签名的内容包括两个随机数以及服务器参数
+
+- [x] 服务器发送 `certificate_request` 消息(可选)
+	- 非匿名DH， `server` 可以向客户请求一个证书
+	- 包含证书类型和 `CAs`
+
+- [x] 服务器发送 `server_hello_done` , 然后等待应答
+
+<p align="center">
+  <img src="./img/第二阶段：服务器认证和密钥交换.png" alt="第二阶段：服务器认证和密钥交换">
+</p>
+
+##### 第三阶段：客户鉴别和密钥交换
+
+- [x] 客户收到 `server_done` 消息后，它根据需要检查服务器提供的证书，并判断 `server_hello` 的参数是否可以接受，如果都没有问题的话，发送一个或多个消息给服务器。
+
+- [x] 如果服务器请求证书的话，则客户首先发送一个 `certificate` 消息，若客户没有证书，则发送一个 `no_certificate` 警告。 然后客户发送 `client_key_exchange` 消息，消息的内容取决于密钥交换的类型(如果是RSA，则含加密的48字节的PreMasterSecret)。
+
+- [x] 最后，客户发送一个 `certificate_verify` 消息(可选)，其中包含一个签名， $\color{red}{对从第一条消息以来的所有握手消息的计算HMAC值}$ ( **用 `master_secret` 作为完整性密钥** )
+
+<p align="center">
+  <img src="./img/第三阶段：客户鉴别和密钥交换.png" alt="第三阶段：客户鉴别和密钥交换">
+</p>
+
+##### 第四阶段：结束
+
+- [x] 第四阶段建立起一个安全的连接
+
+- [x] 客户发送一个 `change_cipher_spec` 消息，并且把协商得到的 `CipherSuite` 拷贝到当前连接的状态之中(目前只包含类型号)
+
+- [x] 然后，客户用本次连接协商的算法、密钥参数发送一个 `finished` 消息，这条消息可以 $\color{red}{检查密钥交换和鉴别过程是否已经成功}$ 。其中包括一个校验值， $\color{red}{对所有以来的消息进行校验}$ ( **用 `master_secret` 作为完整性密钥** )。
+
+- [x] 服务器同样发送 `change_cipher_spec` 消息和 `finished` 消息。
+
+- [x] 握手过程完成，客户和服务器可以传送应用层数据。
+
+<p align="center">
+  <img src="./img/第四阶段：结束.png" alt="第四阶段：结束">
+</p>
 
 ## 5.3 SSL协议的安全性分析
+
+- [x] SSL协议采用的加密和认证算法
+	- 加密算法与会话密钥：算法有RC4，RC2，IDEA，DES，AES；密钥由消息散列函数MD5、SHA-1/2产生
+	- 认证算法：采用X.509证书
+
+- [x] 安全优势
+	- 监听和中间人攻击(√)
+	- 流量数据分析攻击(x) `TLS可以抵抗此类攻击`
+	- 截拼攻击(√)
+	- 重放攻击(√)
+	- 密码回滚攻击CipherSuite Rollback attack(√): SSL3.0中新加的功能，可以防止对密码学算法协商过程的更改
+
+### SSL协议可能存在的问题
+
+- **密钥管理问题**
+	- [x] 许多实现，服务器的证书不是基于可信的CA颁发
+		> - 无证书
+		> - 证书替代，客户端用户通常不在意跳出的警告
+
+- **加密强度问题**
+	- [x] 低比特位数的加密算法(出口限制)
+
+- **数字签名问题**
+	- [x]没有数字签名，不能抗抵赖
 
 ## 5.4 SSL的应用
 
