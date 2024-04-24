@@ -2624,7 +2624,7 @@
 
 - [x] IETF 制定的TLS(Transport Layer Security)版本最初目标是对Netscape公司的SSL和Microsoft公司的PCT两个协议的综合和兼容。
 
-- [x] 本章重点讨论SSLv3协议(TLS1.0->TLS1.3)
+- [x] 本章重点讨论SSLv3协议( $TLS1.0 \rightarrow TLS1.3$ ) 
 	- TLS1.3： RFC 8446(2018)
 
 ### SSL解决的问题(实现的功能)
@@ -2795,9 +2795,9 @@ MD5(pre_master_secret‖SHA-1('CCC'‖pre_master_secret||
 - **`TLS 1.0`** ( $\color{red}{48字节}$ )
 	- <kbd><strong>master_secret = PRF(pre_master_secret, “master secret” , ClientHello.random+ ServerHello.random)[0..47]</strong></kbd>
 	- **PRF(secret, label, seed)为伪随机函数**
-		> - <kbd>P_hash(secret, seed) = HMAC_hash(secret, A(1) || seed) ||  HMAC_hash(secret, A(2) || seed) ||  HMAC_hash(secret, A(3) || seed) || …</kbd>
-		> - <kbd>A(0) = seed;A(i) = HMAC_hash(secret, A(i-1))</kbd>
-		> - <kbd>PRF(secret, label, seed) = P_MD5(secret, label || seed) XOR  P_SHA-1(secret, label || seed)</kbd>
+		> - <kbd>P_hash(secret, seed)=HMAC_hash(secret, A(1)||seed)||HMAC_hash(secret, A(2)||seed)||HMAC_hash(secret, A(3)||seed)||…</kbd>
+		> - <kbd>A(0)=seed;A(i)=HMAC_hash(secret, A(i-1))</kbd>
+		> - <kbd>PRF(secret, label, seed) = P_MD5(secret, label||seed)XOR P_SHA-1(secret, label||seed)</kbd>
 
 #### SSL中其他密钥的生成
 
@@ -2808,7 +2808,7 @@ MD5(pre_master_secret‖SHA-1('CCC'‖pre_master_secret||
 	- 再由 `Key Block` 计算各个密钥。
 
 - [x] **`Key Block` 计算**
-	- <kbd>key_block = MD5(master_secret || SHA(“A”|| master_secret ||ClientHello.random || ServerHello.random)) ||MD5(master_secret || SHA(“BB”|| master_secret ||ClientHello.random || ServerHello.random)) ||MD5(pre_master_secret || SHA(“CCC”|| pre_master_secret || ClientHello.random || ServerHello.random)) || …</kbd>
+	- <kbd>key_block = MD5(master_secret||SHA("A"||master_secret||ClientHello.random||ServerHello.random))||MD5(master_secret||SHA("BB"||master_secret||ClientHello.random||ServerHello.random))||MD5(pre_master_secret||SHA("CCC"||pre_master_secret||ClientHello.random||ServerHello.random))|| …</kbd>
 
 - [x] **相关参数** 
 	- <kbd>client_write_MAC_secret [CipherSpec.hash_size]</kbd>：Client完整性保护密钥长度
@@ -2827,12 +2827,10 @@ MD5(pre_master_secret‖SHA-1('CCC'‖pre_master_secret||
 	- <kbd>server_write_key = key_block[37,…,41]</kbd>
 
 - [x] 相关密钥和参数生成( `128bits` )
-final_client_write_key = MD5(client_write_key || ClientHello.random ||     
-                     ServerHello.random) [0. …, 15] 
-final_server_write_key = MD5(server_write_key || ServerHello.random ||
-                     ClientHello.random) [0, …, 15] 
-client_write_IV = MD5(ClientHello.random || ServerHello.random) [0, …, 7] 
-server_write_IV = MD5(ServerHello.random || ClientHello.random) [0, …, 7]
+	- <kbd>final_client_write_key=MD5(client_write_key||ClientHello.random||ServerHello.random)[0.…,15]</kbd>
+	- <kbd>final_server_write_key=MD5(server_write_key||ServerHello.random||ClientHello.random)[0,…,15]</kbd>
+	- <kbd>client_write_IV=MD5(ClientHello.random||ServerHello.random)[0,…,7]</kbd>
+	- <kbd>server_write_IV=MD5(ServerHello.random||ClientHello.random)[0,…,7]</kbd>
 
 #### 密钥交换算法
 
@@ -2869,11 +2867,11 @@ server_write_IV = MD5(ServerHello.random || ClientHello.random) [0, …, 7]
   <img src="./img/第一阶段：建立起安全协商.png" alt="第一阶段：建立起安全协商">
 </p>
 
-- [x] 客户发送一个client_hello消息，包括以下参数：版本、 `随机数` (32位时间戳+28字节随机序列，TLS1.3中为32字节随机数)、 `会话ID` 、客户支持的密码算法列表(CipherSuite)、客户支持的压缩方法列表
+- [x] 客户发送一个client_hello消息，包括以下参数：版本、 `随机数` (32位时间戳+28字节随机序列，TLS1.3中为32字节随机数)、 `会话ID` 、客户支持的密码算法列表(CipherSuite)、客户支持的压缩方法列表
 
 - [x] 然后，客户等待服务器的server_hello消息
 
-- [x] 服务器发送server_hello消息，参数：客户建议的低版本以及服务器支持的最高版本、 `服务器端随机数` 、 `SessionID(考虑会话重用)` 、服务器从客户建议的密码算法中挑出一套、服务器从客户建议的压缩方法中挑出一个
+- [x] 服务器发送server_hello消息，参数：客户建议的低版本以及服务器支持的最高版本、 `服务器端随机数` 、 `SessionID(考虑会话重用)` 、服务器从客户建议的密码算法中挑出一套、服务器从客户建议的压缩方法中挑出一个
 
 ###### CipherSuite
 
