@@ -2941,6 +2941,39 @@ server_write_IV = MD5(ServerHello.random || ClientHello.random) [0, …, 7]
   <img src="./img/第四阶段：结束.png" alt="第四阶段：结束">
 </p>
 
+### SSL改变密码规格协议和告警协议
+
+- <kbd>SSL Change Cipher Spec Protocol(SSL改变密码规格协议)</kbd>
+	- 改变密码规格(参数)
+
+- <kbd>SSL Alert Protocol(警告协议)</kbd>
+	- 通知SSL对端有关安全错误警报，警报的级别有警告和致命两种(warning or fatal)，此外还有一种终止(closure)
+
+### SSL记录协议(Record Protocol)
+
+- **机密性(confidentiality)**
+	- using symmetric encryption with a shared secret key defined by Handshake Protocol
+	- IDEA, RC2-40, DES-40, DES, 3DES, RC4-40, RC4-128，AES, CHACHA20
+	- message is compressed before encryption（TLS1.3去掉压缩功能）
+
+- **报文完整性(message integrity)**
+	- using a MAC with shared secret key，such as SHA256，SHA384，SHA512
+	- similar to HMAC but with different padding，such as Poly1305
+
+#### 记录数据(Payload)
+
+- [x] 支持4种协议消息：application_data、alert、handshake、change_cipher_spec
+
+- [x] `Alert` 协议消息：报警等级(warning/fatal)+具体报警编码(各1字节)
+
+- [x] `change_cipher_spec` 协议消息： 类型(1字节)，将挂起状态变成当前状态，指示在此之后的所有消息都将使用刚刚商定的密码进行加密。
+
+- [x] `handshake` 协议消息：类型(1字节)＋长度(3字节)＋消息，类型共10种
+
+<p align="center">
+  <img src="./img/记录数据.png" alt="记录数据">
+</p>
+
 ## 5.3 SSL协议的安全性分析
 
 - [x] SSL协议采用的加密和认证算法
