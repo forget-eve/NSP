@@ -2600,10 +2600,157 @@
 - [x] 中间人攻击的应对
 	- 三种认证方式
 
+# 第五章：SSL/TLS协议
+
+## 5.1 SSL协议族概述
+
+- [x] SSL (Secure Socket Layer)是一种在TCP协议之上为两个端实体(End Entity)之间提供安全通道的协议。包括SSLv2、SSLv3、TLS协议
+
+<p align="center">
+  <img src="./img/SSL协议族概述1.png" alt="SSL协议族概述">
+</p>
+
+- [x] $HTTP/3 \rightarrow TLS1.3$
+
+<p align="center">
+  <img src="./img/SSL协议族概述2.png" alt="SSL协议族概述">
+</p>
+
+- [x] 具有 **加密保护传输数据** 以及 **数据源认证** 和 **鉴别通信实体** 的功能。
+
+- [x] 安全通道对应用层是透明的，独立于应用层；传输层采用TCP，提供可靠业务
+
+- [x] 最先在1995年由Netscape公司开发，并被广泛应用于Web等安全服务；Microsoft在SSLv2基础上修补部分安全问题，提出类似的协议PCT(Private Communication Technology)；再之后Netscape的彻底改进，得到SSLv3
+
+- [x] IETF 制定的TLS(Transport Layer Security)版本最初目标是对Netscape公司的SSL和Microsoft公司的PCT两个协议的综合和兼容。
+
+- [x] 本章重点讨论SSLv3协议(TLS1.0->TLS1.3)
+	- TLS1.3： RFC 8446(2018)
+
+### SSL解决的问题(实现的功能)
+
+- **客户对服务器的身份认证**
+	- SSL服务器允许客户的浏览器使用标准的公钥加密技术和一些可靠的认证中心(CA)的证书，来确认服务器的合法性。
+
+- **服务器对客户的身份认证**
+	- 可通过公钥技术和证书进行认证，也可通过 `用户名 + password` 来认证。
+
+- **建立服务器与客户之间安全的数据通道**
+	- SSL要求客户与服务器之间的所有发送的数据都被发送端加密、接收端解密，同时还提供数据完整性的保障。
+
+### SSL提供的安全服务
+
+- **用户和服务器的合法性认证**
+	- using X.509v3 digital certificates
+
+- **传输数据的机密性**
+	- using one of AES, CHACHA20…
+
+- **传输数据的完整性**
+	- using MAC with SHA256，SHA384，SHA512， Poly1305
+
+### SSL/TLS概述
+
+- **SSL协议分为两层**
+	- 底层：记录协议
+	- 上层：握手协议、密码变化协议、警告协议、 `用户数据`
+
+- **握手协议：用于在客户与服务器之间建立安全连接之前交换安全信息**
+	- 客户和服务器之间相互认证
+	- 协商加密算法和密钥
+	- 它提供连接安全性，有三个特点
+		> - 身份认证，至少对一方实现认证（对服务器的），也可以是双向认证
+  > - 协商得到的共享密钥是安全的，中间人不能够知道
+  > - 协商过程本身是可靠的，抗截拼、重放等
+
+- 记录协议
+	- 建立在可靠的传输层协议(TCP)之上
+	- 它提供连接安全性，有两个特点
+		> - 保密性，使用了对称加密算法
+		> - 完整性，使用HMAC算法
+	- 用来封装上层的协议
+
+### SSL/TLS协议栈
+
+- [x] 为上层协议提供安全性
+	- 保密性
+	- 身份认证、数据源认证和数据完整性
+
+<p align="center">
+  <img src="./img/SSL协议族概述3.png" alt="SSL/TLS协议栈">
+</p>
+
+### SSL的工作原理
+
+- [x] 采用 $\underline{\color{red}{握手协议}}$ 建立客户与服务器之间的安全通道，该协议包括双方的相互认证，交换密钥参数
+
+- [x] 采用 $\underline{\color{red}{告警协议}}$ 向对端指示其安全错误
+
+- [x] 采用 $\underline{\color{red}{改变密码规格协议}}$ 告知改变密码参数
+
+- [x] 采用 $\underline{\color{red}{记录协议}}$ 封装以上三种协议或应用层数据(记录类型：20=改变密码规格，21=告警，22=握手，23=应用层数据)
+
+#### 记录协议中的记录头(Head)
+
+- [x] ContentType; —— 8位，上层协议类型
+
+- [x] Major version; Minor version—— 各8位，主次版本
+
+- [x] Compressed Length：16位— 加密后数据的长度，不超过 $2^{14}+2048$ 字节(SSL 几乎不用压缩,虽然支持)
+
+- [x] EncryptedData fragment; —— 密文数据
+
+<p align="center">
+  <img src="./img/记录协议中的记录头.png" alt="记录协议中的记录头">
+</p>
+
+#### SSL记录协议保护方式
+
+<p align="center">
+  <img src="./img/SSL记录协议保护方式.png" alt="SSL记录协议保护方式">
+</p>
+
+##### 加密记录的产生方式
+
+<p align="center">
+  <img src="./img/加密记录的产生方式.png" alt="加密记录的产生方式">
+</p>
+
+> $\color{red}{注：序列号初始为0，随着数据包累加1，不需要进行传输！}$
+
+#### SSL 握手协议
+
+- <kbd>allows server & client to</kbd> :
+	- `authenticate each other`
+	- `to negotiate encryption & MAC algorithms`
+	- `to negotiate cryptographic keys to be used`
+
+- <kbd>comprises a series of messages in phases</kbd>
+	- `Establish Security Capabilities`
+	- `Server Authentication and Key Exchange`
+	- `Client Authentication and Key Exchange`
+	- `Finish`
+
+##### SSL 握手协议(RSA方式)
 
 
+## 5.2 SSL体系结构与协议
 
-# 第五章：SSL/TLS协议  
+## 5.3 SSL协议的安全性分析
+
+## 5.4 SSL的应用
+
+- [x] 匿名SSL连接
+使用SSL的基本模式——仅对服务器验证，用于用户注册等信息的保护
+
+- [x] SSL VPN	
+	- 服务器端需要验证证书，客户端可以验证证书或用户名加密码
+
+- [x] 电子商务
+	- 商家和银行必须相互有证书
+	- 客户和商家之间的通信可以采用仅认证商户方式，兼顾了安全和易用性
+	- 商家与银行之间传送的是顾客数据，通信双方必须先互相验证证书
+
 # 第六章：防火墙与NAT
 # 第七章：虚拟专用网VPN   
 # 第八章：应用层安全协议  
