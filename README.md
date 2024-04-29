@@ -2998,6 +2998,38 @@ MD5(pre_master_secret‖SHA-1('CCC'‖pre_master_secret||
 - **数字签名问题**
 	- [x] 没有数字签名，不能抗抵赖
 
+### 最新TLS1.3(RFC8446)的主要改进
+
+- [x] 更快的协商过程
+	- 减少握手过程的时间
+	- 加快数据传输流程
+
+- [x] 增强的安全性(举例)
+	- RSA 密钥传输 —— 不支持前向安全性
+	- CBC 模式密码 —— 易受 BEAST 和 Lucky 13 攻击
+	- RC4 流密码 —— 在 HTTPS 中使用并不安全
+	- MD5/SHA-1 哈希函数 —— 建议以 SHA-2 取而代之
+	- 任意 `Diffie-Hellman` 组 —— CVE-2016-0701 漏洞
+	- EXPORT输出密码 —— 易受 FREAK 和 LogJam 攻击
+
+> - 参考 https://segmentfault.com/a/1190000012731888
+
+- [x] 重组握手流程( $2RTT \rightarrow 1RTT$ )
+
+- [x] 零往返时间(0-RTT)模式
+
+- [x] 对称加密算法更新
+
+- [x] 弃用静态RSA和DH密码套件
+
+- [x] 更新密钥派生功能
+
+- [x] 提供前向保密
+
+- [x] 加密在Server-Hello之后的所有握手消息
+
+- [x] 删除压缩
+
 ## 5.4 SSL的应用
 
 - [x] 匿名SSL连接
