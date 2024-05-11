@@ -3622,10 +3622,215 @@ $$
 
 - [x] (双机热备)
 
+#### 屏蔽路由器型结构
 
+- [x] 屏蔽路由器(Screening Router)
+	- 简单的包过滤功能
+	- 优点：投资小，配置简单
+	- 缺点：在ACL(Access-Control List)较多时，影响路由器的性能
 
-## NAT技术
+- [x] 适用于如下环境
+	- 网络内部的主机安全性比较好，规则简单
+	- 对性能、可靠性要求比较高
 
+<p align="center">
+  <img src="./img/屏蔽路由器型结构.png" alt="屏蔽路由器型结构">
+</p>
+
+#### 屏蔽主机结构(单宿主主机)
+
+- [x] 包过滤路由器和 `堡垒主机` 一起构成安全系统(逻辑隔离)
+
+- [x] 堡垒主机
+	- 一台暴露在外部网络的攻击之下的计算机
+	- 要求安全性配置比较好的计算机。
+
+- [x] 适用于
+	- 只对外提供较少的服务，外部来的连接比较少
+	- 内部主机安全性配置较好
+
+<p align="center">
+  <img src="./img/屏蔽主机结构.png" alt="屏蔽主机结构">
+</p>
+
+#### 双宿主主机
+
+- [x] 双宿主机(Dual Home Host)
+	- 至少有两块网卡的通用计算机系统
+	- 可以是包过滤软件/硬件、应用层代理
+	- 增加了单一故障点，影响网络吞吐量
+	- 同时攻破路由器和堡垒主机，内部网络才是不安全的
+
+- [x] 适用于如下应用环境
+	- 去往Internet的流量比较小
+	- 对可靠性要求不高
+	- 不对外提供服务
+
+<p align="center">
+  <img src="./img/双宿主主机.png" alt="双宿主主机">
+</p>
+	
+#### 屏蔽子网结构
+
+- [x] DMZ(Demilitarized Zone)，非军事区或者停火区
+	- 包含两个包过滤路由器
+	- 在内部网络和外部网络之间创建了一个新的子网，可能只包含堡垒主机，也可能还包含一个或者多个信息服务器
+
+<p align="center">
+  <img src="./img/屏蔽子网结构.png" alt="屏蔽子网结构">
+</p>
+	
+- [x] 外部路由器
+	- 只允许对DMZ的访问
+	- 拒绝所有以内部网络地址为目的地址的包进入内部网络
+
+- [x] DMZ(Demilitarized zone)，不设防区
+	- 通常放置DNS、Web 、 Email、 FTP、Proxy Server等
+
+- [x] 内部路由器
+	- 保护内部网络，防止来自Internet或DMZ的非法访问
+	- 内部网络一般不对外部提供服务，所以拒绝外部发起的一切连接，只允许内部对外的访问
+	- 在特定需要前提下，可以允许从堡垒主机来的访问
+	- 从内部往外的访问也可以限制为必须通过堡垒主机
+
+#### 双机热备保证稳定性
+
+<p align="center">
+  <img src="./img/双机热备保证稳定性.png" alt="双机热备保证稳定性">
+	<p align="center">
+   <span>双机热备保证稳定性</span>
+  </p>
+</p>
+
+### 与防火墙联动的其他安全技术举例
+
+- [x] 基于网络的入侵检测系统(IDS)
+
+- [x] IPSec VPN网关
+
+#### 与IDS(入侵检测系统)联动构成应急响应系统
+
+<p align="center">
+  <img src="./img/联动构成应急响应系统.png" alt="联动构成应急响应系统">
+	<p align="center">
+   <span>与IDS(入侵检测系统)联动构成应急响应系统</span>
+  </p>
+</p>
+
+#### IPSec VPN网关
+
+<p align="center">
+  <img src="./img/IPSec-VPN网关.png" alt="IPSec VPN网关">
+	<p align="center">
+   <span>IPSec VPN网关</span>
+  </p>
+</p>
+
+## NAT(Network Address Translation)技术
+
+- [x] 在RFC1597中定义了内部网地址(或称专网，Private Internet，Intranet)
+
+- [x] 有部分IP地址被IANA组织定义用作内部网地址: 
+	- <kbd>10.0.0.0 - 10.255.255.255</kbd>
+ 		> - `A single Class A network`
+	- <kbd>172.16 .0.0- 172.31 .255.255</kbd>
+		> - `16 contiguous Class B networks`
+	- <kbd>192.168.0.0 - 192.168.255 .255</kbd>
+ 		> - `256 contiguous Class C networks` 
+
+### NAT技术(RFC 1631，后被取代为RFC3022)
+
+- [x] NAT技术可以在路由器(边界)、防火墙上实现内外地址的翻译工作
+
+- [x] NAT可以划分为以下两种类型(从发起者的报文)：
+	- 源网络地址转换(Source NAT，缩写为SNAT)，即IP伪装(masquerade)
+	- 目的网络地址转换(Destination NAT，缩写为DNAT)。
+
+- [x] 实现方式(从地址转换的对应关系看)：
+
+$$
+NAT\begin{cases}
+静态NAT(static NAT) \leftarrow 对应 \newline
+动态NAT(Dynamic NAT) \leftarrow 多对多 \newline
+\end{cases}
+NAT-PT:过载(Overloading) \newline 一对多
+$$
+
+- [x] 作用
+	- SNAT
+		> - 复用内部的全局地址，解缓IP地址不足的压力
+		> - 向外部网络隐藏内部网络的IP地址
+	- DNAT
+		> - 在实现SNAT的环境下进行有效的服务访问
+		> - 流量均衡
+
+### NAT的工作原理
+
+- [x] 客户机将数据包发给运行NAT的计算机设备(NAT设备)
+
+- [x] NAT将数据包中的端口号和专用的IP地址换成它自己的某个端口号和公用的IP地址，然后将数据包发给外部网络的目的主机，同时会记录一个 `跟踪信息` (Netfilter中为/proc/net/ip_conntrack)在映射表中，以便向客户机发送回答信息时的反映射。
+
+- [x] 外部网络发送回答信息给NAT设备
+
+- [x] NAT设备将所收到的数据包的端口号和公用IP地址转换为客户机的端口号和内部网络使用的专用IP地址并转发给客户机。
+
+<p align="center">
+  <img src="./img/NAT的工作原理.png" alt="NAT的工作原理">
+</p>
+
+### SNAT的工作原理
+
+- **SNAT工作过程中的两次地址转换** ：
+	- 对于来自NAT协议的传出数据包，源IP地址(专用地址)被映射到ISP分配的地址(公用地址)，并且TCP/UDP端口号也会被映射到不同的TCP/UDP端口号，建立 `映射表` 信息。
+	- 对于到NAT协议的传入数据包，根据 `映射表` 信息，目标IP地址( $\color{red}{公用地址}$ )被映射到源Internet地址( $\color{red}{专用地址}$ )，并且TCP/UDP端口号被重新映射回源TCP/UDP端口号。
+
+### NAT技术举例
+
+<p align="center">
+  <img src="./img/NAT技术举例.png" alt="NAT技术举例">
+	<p align="center">
+   <span>NAT技术举例</span>
+  </p>
+</p>
+
+#### Outgoing Web Client Through NAT
+
+<p align="center">
+  <img src="./img/NAT技术举例1.png" alt="Outgoing Web Client Through NAT">
+	<br>
+	<br>
+	<img src="./img/NAT技术举例2.png" alt="Outgoing Web Client Through NAT">
+	<p align="center">
+   <span>Outgoing Web Client Through NAT</span>
+  </p>
+</p>
+
+#### DNAT-端口映射
+
+<p align="center">
+  <img src="./img/DNAT-端口映射.png" alt="DNAT-端口映射">
+	<p align="center">
+   <span>DNAT-端口映射</span>
+  </p>
+</p>
+
+#### Linux中网络层的处理流程
+
+<p align="center">
+  <img src="./img/Linux中网络层的处理流程.png" alt="Linux中网络层的处理流程">
+	<p align="center">
+   <span>Linux中网络层的处理流程</span>
+  </p>
+</p>
+
+#### NAT中的内定规则链
+
+<p align="center">
+  <img src="./img/NAT中的内定规则链.png" alt="NAT中的内定规则链">
+	<p align="center">
+   <span>NAT中的内定规则链</span>
+  </p>
+</p>
 
 # 第七章：虚拟专用网VPN   
 # 第八章：应用层安全协议  
