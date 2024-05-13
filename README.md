@@ -3867,6 +3867,155 @@ $$
   </p>
 </p>
 
-# 第七章：虚拟专用网VPN   
+# 第七章：虚拟专用网VPN(Virtual Private Network)
+
+## 7.1 VPN概述
+
+- [x] 虚拟专用网络可以实现不同网络的组件和资源之间的相互连接。虚拟专用网络能够利用Internet或其它公共互联网络的基础设施为用户创建 `隧道` ，并提供与物理专用网络一样的安全和功能保障。
+
+- [x] 在虚拟专网中，任意两个节点之间的连接并没有传统专网所需的端到端的物理链路，而是利用某种公众网的资源动态组成的。
+
+- [x] 是通过 `隧道技术` 在公共数据网络上 `虚拟` 出一条点到点的专线技术。
+
+### VPN概述
+
+- [x] 虚拟“Virtual” 指没有物理的连接存在于2个网络间；事实上，连接是通过Internet的路由完成的；
+
+- [x] 专用“Private” 指传输的数据是保密的，不可篡改的 (通过加密、完整性保护，以及隧道技术)；
+
+- [x] 网络“Network” 指利用各种网络（私有、公用、有线、无线等等）构成的通信手段
+
+#### Tunneling through the Internet
+
+<p align="center">
+  <img src="./img/VPN的典型应用.png" alt="VPN的典型应用">
+	<p align="center">
+   <span>VPN的典型应用</span>
+  </p>
+</p>
+
+### 为什么需要VPN
+
+- [x] 资源访问限制于某些特定的IP地址
+
+- [x] 通过防火墙不能访问某些资源
+
+- [x] 内部人员或者在外地的雇员需要访问内部网络
+
+- [x] 架设物理专有网太贵
+
+- [x] 外地的雇员也可能不是定点的
+
+- [x] ……
+
+### 对VPN的需求
+
+- **安全保障**
+	- [x] VPN应保证通过公用网络平台传输数据的专用性和安全性，这是目前公共Internet所无法提供的功能 
+
+- **服务质量(QoS)保证**
+	- 对不同的用户提供不同的服务质量，如带宽、时延等保证，这取决于广域网上是否提供QoS保证
+
+- **可扩展性和灵活性**
+	- [x] 便于增加新的节点，支持多种类型的传输媒体
+
+- **可管理性**
+	- [x] 易于维护和管理：安全管理、设备管理、配置管理、访问控制列表管理等等
+
+### VPN的优势
+
+- [x] 不受地理位置的限制，实现完全控制主动权
+
+- [x] 可扩展性强
+
+- [x] 增强安全性
+
+- [x] 节省大量费用
+
+- [x] ……
+
+### 建立VPN所需的安全技术
+
+- [x] VPN主要采用五项技术来保证安全和提供所需要功能，这五项技术分别为
+	- `隧道技术(Tunneling)`
+		- [ ] 隧道协议将其它协议的数据帧或包重新封装在新的包头中发送。新的包头提供了路由信息，从而使封装的原始数据能够通过互联网络传递。
+	- 加解密技术(Encryption & Decryption)
+	- 密钥管理技术(Key Management)
+	- 认证技术(Authentication)
+	- 访问控制(Access Control)
+
+### 隧道协议和VPN类型
+
+- [x] 按隧道协议技术分类
+	- 基于第二层隧道技术的VPN(层2发送协议(L2F)、层2隧道协议(L2TP)、点到点隧道协议(PPTP))
+	- IPSec VPN
+ - GRE VPN
+ - MPLS VPN
+ - SSL VPN
+
+- [x] 按应用类型分类
+	- 远程访问型
+	- LAN间互连
+
+### VPN
+
+- [x] Two main kinds Applications
+	- Lan-to-Lan VPN(LAN间VPN)
+	- Firewall-To-Laptop VPN(远程访问型VPN)
+
+<p align="center">
+  <img src="./img/VPN1.png" alt="VPN">
+	<br>
+	<br>
+	<img src="./img/VPN2.png" alt="VPN">
+</p>
+
+#### LAN间VPN
+
+<p align="center">
+  <img src="./img/LAN间VPN.png" alt="LAN间VPN">
+	<p align="center">
+   <span>LAN间VPN</span>
+  </p>
+</p>
+
+#### 远程访问型VPN
+
+<p align="center">
+  <img src="./img/远程访问型VPN.png" alt="远程访问型VPN">
+	<br>
+	<br>
+	<img src="./img/远程访问型VPN1.png" alt="远程访问型VPN">
+	<p align="center">
+   <span>远程访问型VPN</span>
+  </p>
+</p>
+
+#### 基于服务器的认证方式————RADIUS
+
+- [x] RADIUS(Remote Authentication Dial In User Service)由朗讯开发，1997年1月公布在RFC2058，用于 `AAA(Authentication、Authorization and Accounting)` 认证，基于客户/服务器方式
+
+<p align="center">
+  <img src="./img/基于服务器的认证方式.png" alt="基于服务器的认证方式">
+	<p align="center">
+   <span>基于服务器的认证方式————RADIUS</span>
+  </p>
+</p>
+
+## 7.2 隧道技术
+
+
+
+
+## 7.3 IPSec VPN
+## 7.4 MPLS VPN
+
+
+
+
+
+
+
+
 # 第八章：应用层安全协议  
 # 第九章：无线局域网安全  
