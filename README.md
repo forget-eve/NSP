@@ -4004,12 +4004,95 @@ $$
 
 ## 7.2 隧道技术
 
+- [x] 隧道技术就是利用隧道协议对隧道两端的数据进行封装的技术，隧道协议通常有第2层、第3层和第四层(SSL)隧道协议
 
+- [x] 第2层隧道协议
+	- 第二层隧道协议是先把各种网络协议封装到PPP中，再把整个数据包装入隧道协议中。这种双层封装方法形成的数据包靠第二层协议进行传输。
+	- 第二层隧道协议有L2F、PPTP、L2TP等。L2F(Layer 2 Forwarding)/ PPTP(Point-to-Point Tunneling Protocol)/ L2TP(Layer 2 Tunneling Protocol)都是 `远程访问VPN` 的协议， L2TP协议是目前IETF的标准， 是在L2F和PPTP基础上进行综合，其格式是基于L2F，信令是基于PPTP。
 
+- [x] 第3层隧道协议
+	- IPSec：隧道模式可以用于VPN构建，其提供的认证、加密功能适用于建立VPN安全环境，它既能提供 `LAN间VPN` ，也能提供 `远程访问型VPN`
+	- MPLS VPN，提供QoS保障，需要核心网络支持MPLS。
+
+- [x] 第4层隧道协议
+	- SSL VPN：无需专门的客户端，只要支持web访问即可，与操作系统无关，穿越防火墙和NAT
+
+### 第2层隧道协议
+
+- [x] L2F(Layer 2 Forwarding)：1998年标准化的远程访问VPN的协议。它是基于ISP的由若干远程接入服务器(remote access server)提供VPN功能的协议。
+
+- [x] PPTP(Point to Point Tunneling Protocol)也是为实现基于ISP的远程访问VPN而制订的协议。在分组和封装化头标中采用了扩展GRE(Generic Routing Encapsulation：通用寻路封装)。在Windows中将GRE作为标准功能提供，这是当前最易于使用的VPN协议。
+
+<p align="center">
+  <img src="./img/第2层隧道协议.png" alt="第2层隧道协议">
+</p>
+
+- [x] L2TP(Layer 2 Tunneling Protocol)是远程访问型VPN今后的标准协议。它将PPTP和L2F综合，以便扩展功能。其格式基于L2F，信令(signaling)基于PPTP。
+
+<p align="center">
+  <img src="./img/第2层隧道协议1.png" alt="第2层隧道协议">
+</p>
 
 ## 7.3 IPSec VPN
+
+- [x] IPSec 不是一个单独的协议，而是一套协议包，包括三个基本协议
+	- AH 协议提供信息源验证和完整性保证；
+	- ESP 协议提供信息源验证、机密性和完整性保证；
+	- IKE提供密钥协商(IKEv1、IKEv2)
+
+- [x] 提供安全的网络传输服务
+
+- [x] 主要适用于LAN间VPN(隧道模式)
+
+- [x] IKE支持动态密钥交换，采用预共享密钥或公钥机制认证身份，协商加密、认证密钥
+
+- [x] 具有数据传输的完整性认证、加密功能
+
+- [x] 实现方式
+	- VPN专用设备
+	- 将IPSec嵌入到防火墙软件
+	- 将IPSec嵌入到路由器软件
+	- 动态IP地址的IPSec VPN(利用动态域名服务器)
+
+<p align="center">
+  <img src="./img/IPSec-VPN.png" alt="IPSec VPN">
+</p>
+
 ## 7.4 MPLS VPN
 
+### 什么是MPLS?
+
+- [x] MPLS, Multi Protocol Label Switching：多协议标记交换
+
+- [x] 起源于Cisco的Tag Switching(1996)，后由IETF标准化，并改为多协议标记交换。是一种支持多种网络层协议的快速转发技术，它就象一个垫片(shim)，处于OSI的第2、3层之间。
+
+- [x] MPLS吸收了ATM网络的 `交换思想` ，集成了 `IP路由技术` 的灵活性和第2层交换的简捷性，将第二层的基础设施和第三层的路由进行有机结合， $\color{red}{\underline{路由功能在网络边缘}}$ ， $\color{red}{\underline{MPLS核心网络采用MPLS交换}}$ 。为IP网络提供了 $\color{red}{\underline{面向连接的交换}}$ 。
+
+#### MPLS基本原理
+
+- <kbd>ROUTE AT EDGE, SWITCH IN CORE</kbd>
+
+<p align="center">
+  <img src="./img/MPLS基本原理.png" alt="MPLS基本原理">
+</p>
+
+> 回忆和总结：交换的好处？
+
+#### MPLS Terminology
+
+- LDP: Label Distribution Protocol 标记分发协议
+- LSP: Label Switched Path标记交换路径
+- FEC: Forwarding Equivalence Class转发等价类
+- LSR: Label Switching Router标记交换路由器
+- LER: Label Edge Router 标记边缘路由器
+
+<p align="center">
+  <img src="./img/MPLS-Terminology.png" alt="MPLS Terminology">
+</p>
+
+
+### MPLS基本原理
+### MPLS VPN
 
 
 
