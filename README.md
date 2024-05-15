@@ -4068,7 +4068,7 @@ $$
 
 - [x] MPLS吸收了ATM网络的 `交换思想` ，集成了 `IP路由技术` 的灵活性和第2层交换的简捷性，将第二层的基础设施和第三层的路由进行有机结合， $\color{red}{\underline{路由功能在网络边缘}}$ ， $\color{red}{\underline{MPLS核心网络采用MPLS交换}}$ 。为IP网络提供了 $\color{red}{\underline{面向连接的交换}}$ 。
 
-#### MPLS基本原理
+### MPLS基本原理
 
 - <kbd>ROUTE AT EDGE, SWITCH IN CORE</kbd>
 
@@ -4077,6 +4077,7 @@ $$
 </p>
 
 > 回忆和总结：交换的好处？
+> - 提高效率
 
 #### MPLS Terminology
 
@@ -4090,15 +4091,95 @@ $$
   <img src="./img/MPLS-Terminology.png" alt="MPLS Terminology">
 </p>
 
+#### 与传统路由的区别
 
-### MPLS基本原理
+<p align="center">
+  <img src="./img/与传统路由的区别.png" alt="与传统路由的区别">
+	<p align="center">
+   <span>与传统路由的区别</span>
+  </p>
+</p>
+
+#### MPLS头标格式及位置
+
+<p align="center">
+  <img src="./img/MPLS头标格式及位置.png" alt="MPLS头标格式及位置">
+	<p align="center">
+   <span>MPLS头标格式及位置</span>
+  </p>
+</p>
+
+#### 工作原理
+
+<p align="center">
+  <img src="./img/工作原理.png" alt="工作原理">
+	<br>
+	<br>
+	<img src="./img/工作原理1.png" alt="工作原理">
+	<p align="center">
+   <span>工作原理</span>
+  </p>
+</p>
+
+#### 转发等价类 Forwarding Equivalence Classes
+
+- [x] 转发等价类(FEC)：所有在MPLS网络中需要做相同转发处理、相同路由处理的分组。
+
+<p align="center">
+  <img src="./img/转发等价类.png" alt="转发等价类">
+</p>
+
+#### Label Distribution ———— Methods
+
+<p align="center">
+  <img src="./img/Label-Distribution.png" alt="Label Distribution">
+</p>
+
+##### DOWNSTREAM MODE
+
+<p align="center">
+  <img src="./img/DOWNSTREAM-MODE.png" alt="DOWNSTREAM MODE">
+</p>
+
+##### DOWNSTREAM ON DEMAND
+
+<p align="center">
+  <img src="./img/DOWNSTREAM-ON-DEMAND.png" alt="DOWNSTREAM ON DEMAND">
+</p>
+
 ### MPLS VPN
 
+- [x] 利用标记通道为用户提供有安全的、有服务质量保证的虚拟专网服务。
 
+- [x] 利用MPLS构建VPN时，只需对不同的企业集团分配不同的 `标记通道` ，企业网使用的内部地址也仍可以原封不动使用(即企业网网关可以不用NAT)。
 
+- [x] 利用 `标记堆叠` 来实现VPN，在一个IP分组上叠加两个MPLS标记头标进行 `转发` ，外标记用于转发，内标记用于 `VPN接入(FEC标识+VPN标识)` 。
 
+<p align="center">
+  <img src="./img/MPLS-VPN.png" alt="MPLS VPN">
+</p>
 
+#### MPLS-VPN的工作步骤
 
+<p align="center">
+  <img src="./img/MPLS-VPN的工作步骤.png" alt="MPLS-VPN的工作步骤">
+	<br>
+	<br>
+	<img src="./img/MPLS-VPN的工作步骤1.png" alt="MPLS-VPN的工作步骤">
+	<p align="center">
+   <span>MPLS-VPN的工作步骤</span>
+  </p>
+</p>
+
+#### MPLS VPN与IPSec VPN
+
+- [x] MPLS VPN的安全性与帧中继、ATM类似，即租用了一条虚连接(局部)。
+
+- [x] MPLS VPN不涉及认证、加密功能。
+
+- [x] IPSec VPN提供认证、加密功能，能保证数据的机密性、完整性
+
+- [x] 对安全需求强的业务可以将IPSec和MPLS VPN结合使用
 
 # 第八章：应用层安全协议  
 # 第九章：无线局域网安全  
