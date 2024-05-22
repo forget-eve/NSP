@@ -2239,7 +2239,7 @@
 
 - [x] $N_X$ ： $X$ 的 `nonce` 载荷， $X$ 为i(发起者)或 $r$ (响应者)
 
-- [x] $<P>\underline{}b$ ：载荷 $P$ 的主体，就是没有通用头的载荷
+- [x] $< P >\underline{}b$ ：载荷 $P$ 的主体，就是没有通用头的载荷
 
 - [x] $CKY-I(CKY-R)$ ： `ISAKMP` 头中的发起者(响应者) `cookie`
 
@@ -4181,5 +4181,333 @@ $$
 
 - [x] 对安全需求强的业务可以将IPSec和MPLS VPN结合使用
 
-# 第八章：应用层安全协议  
+# 第八章：应用层安全协议
+
+## 8.1 电子邮件安全协议(PGP、S/MIME)
+
+### 邮政系统
+
+<p align="center">
+  <img src="./img/邮政系统.png" alt="邮政系统">
+	<p align="center">
+   <span>邮政系统</span>
+  </p>
+</p>
+
+### 电子邮件系统
+
+<p align="center">
+  <img src="./img/电子邮件系统.png" alt="电子邮件系统">
+	<p align="center">
+   <span>电子邮件系统</span>
+  </p>
+</p>
+
+### 电子邮件安全协议(PEM、S/MIME、PGP)
+
+- `电子邮件的威胁`
+	- 邮件炸弹
+	- 邮件欺骗 
+	- 垃圾邮件
+	- 邮件携带病毒、恶意代码
+
+- `电子邮件安全协议`
+	- PEM(Privacy Enhanced Email，RFC 1421-1424)
+	- S/MIME
+	- PGP(Pretty Good Privacy)
+
+#### 电子邮件的安全需求
+
+- `机密性：只有接收者才能阅读`
+	- 报文的加密：关键是密钥的分发
+	- 收发双方如何共享密钥？
+		- 多个接收者时该怎么办?
+			> - 发送者生成一个密钥，采用对称密码算法加密报文，即S{M}再用接收方的公钥加密密钥S，并与加密的报文同时发送。假设接收者有A、B、C三人，就分别生成三个加密密钥KA{S}，KB{S}，KC{S}。
+
+- `认证：发送者的身份认证`
+	- 基于公钥技术，用发送者的私钥对报文的摘要进行加密，即数字签名
+	- 基于共享密钥：事先发送者与接收者共享一个密钥，采用消息认证码(MAC)对报文进行认证
+
+- `完整性：报文未被修改`
+	- 报文的完整性与身份认证的方法类似，通常可在一起进行
+
+- `抗否认性：发信者的不可抵赖性，可供第三方鉴别`
+	- 基于公钥技术，采用发送者的私钥签名
+
+#### PGP（Pretty Good Privacy）
+
+- `Email安全加密系统`
+
+- `PGP提供的安全业务` ：
+	- `加密` ：发信人产生一次性会话密钥，以IDEA、3-DES或CAST-128算法加密报文，采用RSA算法用 **收信人的公钥加密会话密钥** ，并和消息一起送出。
+	- `认证` ：用SHA-1对报文杂凑，并以发信人的私钥签字，签名算法采用RSA或DSS 。
+	- `压缩` ：ZIP，用于消息的传送或存储。 **在压缩前签名，压缩后加密。**
+	- `兼容性` ：采用Radix-64可将加密的报文转换成ASCII字符
+	- `数据分段` ：PGP具有分段和组装功能，适应最大消息长度限制
+
+##### 机密性和认证
+
+- `机密性`
+	- 发送端产生随机数作为会话密钥
+	- 对称算法加密报文
+	- 接收端公钥加密会话密钥
+
+- `认证`
+	- 采用SHA-1产生HASH值
+	- 用发送者的私钥对HASH值签名(RSA)
+
+- `当同时需要认证和加密服务时`
+	- 采用先签名，后加密顺序(与IPSec AH/ESP同时使用时，先ESP再AH `正好相反` )
+		> - 通常将明文与签名一起保存比较方便
+		> - 验证时，不需要涉及会话密钥
+
+<p align="center">
+  <img src="./img/机密性和认证.png" alt="机密性和认证">
+</p>
+
+##### 压缩
+
+- **PGP 的压缩过程在报文的签名和加密之间，即先对报文签名，然后压缩，再是加密**
+	- 签名后再压缩是为了方便保存未压缩的报文和签名，为了以后存储方便，如果签名是对压缩后报文进行的，势必要保存一份压缩的文档与之对应，或者增加部分计算。但相同的压缩算法可能产生略微不同的压缩结果。
+	- 压缩后加密可以节约传输文件的存储空间，加快加密速度，且因为压缩，减少了原文中的关联性，使密码分析也更困难
+
+- **压缩算法采用ZIP**
+
+##### E-mail 的兼容性
+
+- **在多数的邮件系统中是以ASCII字符形式传输(基于标准)，加密后的任意8比特报文可能不符合ASCII字符特点。**
+
+- **采用基64转换方式。**
+
+- **基64转换方式 的采用将原报文扩展了33%。**
+	- 把3个8位字节(3×8=24)转化为4个6位的字节(4×6=24)，先查 `对应的基-64表` ，再 **对应到ASCII表** ，首位置0
+
+<p align="center">
+  <img src="./img/E-mail 的兼容性.png" alt="E-mail 的兼容性">
+</p>
+
+###### Base64
+
+<p align="center">
+  <img src="./img/Base64.png" alt="Base64">
+</p>
+
+##### 分段和重组
+
+- **通常邮件的最大报文的长度限制在50,000字节**
+
+- **超过标准长度的报文必须分段**
+
+- **PGP自动对过长的报文分段**
+
+- **接收端再将其重组**
+
+##### Summary of PGP Services
+
+<p align="center">
+  <img src="./img/Summary-of-PGP-Services.png" alt="Summary of PGP Services">
+</p>
+
+- [x] 注：在开源版本GnuPGP中使用更高安全性的最新算法，如DSA等，来提升安全性
+
+##### Transmission and Reception of PGP Messages
+
+<p align="center">
+  <img src="./img/Transmission-and-Reception-of-PGP-Messages.png" alt="Transmission and Reception of PGP Messages">
+</p>
+
+##### 加密密钥和密钥环
+
+- **PGP使用四种类型的密钥：一次性会话对称密钥，公钥，私钥** ， `基于对称密钥的口令`
+
+- 需求
+	- 需要生成不可预测的会话密钥(随机算法)
+	- 需要某种手段来标识具体的密钥(一个用户可拥有多个公钥/私钥对，以便随时更换且让对方知道来自哪个密钥对)
+	- 每个PGP实体需要维护一个保存其公钥/私钥对的文件和一个保存通信对方公钥的文件
+
+###### 密钥标识符(Key ID)
+
+- **一个用户有多个公钥/私钥对时，接收者如何知道发送者是用了哪个公钥来加密会话密钥，方法：**
+	- `将一个标识符(KeyID)与一个公钥关联，对一个用户来说做到一一对应即可`
+
+- **定义KeyID包括64个有效位，(KUa mod $2^{64}$ )**
+
+###### 密钥环(Key Rings)
+
+- **KeyID在PGP中标识所使用的发送者和接收者的密钥号**
+	- 两个keyID包含在任何PGP消息中提供保密与认证功能
+	- 需要一种系统化的方法存储和组织这些key以保证使用
+
+- **PGP在每一个节点上提供一对数据结构**
+	- 存储该节点拥有的公钥/私钥对私钥环( `口令保护密钥` )
+	- 存储本节点知道的其他用户的公钥环
+
+###### General structure of private and public key rings
+
+<p align="center">
+  <img src="./img/General-structure-of-private-and-public-key-rings.png" alt="General structure of private and public key rings">
+</p>
+
+##### Format of PGP Message
+
+<p align="center">
+  <img src="./img/Format-of-PGP-Message.png" alt="Format of PGP Message">
+</p>
+
+##### PGP message生成操作
+
+<p align="center">
+  <img src="./img/PGP-message生成操作.png" alt="PGP message生成操作">
+</p>
+
+##### PGP message接收操作
+
+<p align="center">
+  <img src="./img/PGP-message接收操作.png" alt="PGP message接收操作">
+</p>
+
+##### 公钥管理
+
+- [x] PGP虽然采用公钥密码体系， `但不是证书`
+
+- [x] 需要保证公钥确实是所指定用户的合法公钥，保护公钥免受攻击是PGP的一个问题
+
+- [x] 可以采用的方法
+	- 直接索取，其他方式确认
+	- 从可信任证书机构获得B的公钥
+	- `采用信任关系保护(从可信第三方)公钥`
+		> - `完全信任、部分信任、不信任`
+
+#### S/MIME
+
+- **Secure/Multipurpose Internet Mail Extension(安全/多用途Internet邮件扩展，RFC3369，3370、RFC3850，3851)**
+
+- **S/MIME 旨在成为商业和机构使用的工业标准**
+
+- **PGP 为个人e-mail 提供安全**
+
+##### Simple Mail Transfer Protocol
+
+- SMTP ，RFC821
+	- RFC5322(Internet Message Format)
+
+- **SMTP(简单邮件传输协议)存在的问题:**
+	- `不能传输可执行文件和其他二进制码(jpeg image)，二进制转换成文本格式，现在方案缺少标准`
+	- `只能传输7位ASCII字符的文字，而中文字符等无法直接使用`
+	- SMTP服务器拒绝接收超长邮件
+	- ASCII 到 EBCDIC 转换问题
+	- 截取换行超过76字符的行，等等(与现有标准不一致)
+
+- **MIME是对SMTP(RFC822)框架的扩展，致力于解决SMTP中关于邮件格式和编码方面存在的问题**
+
+###### MIME的头标
+
+- **MIME的头标定义了5个新的字段**
+	- **版本(MIME-Version)** :1.0(按照 RFC 2045, RFC 2046定义的规格)
+	- **`内容类型` (Content-Type)** : 这个字段用于详细描述主体的数据
+	- **`内容传输编码` (Content-Transfer-Encoding)** :内容采用的编码方案 (如radix-64)
+	- **内容ID(Content-ID)** : 该字段主要用于多个上下文时，对MIME实体的标识.
+	- **内容描述(Content Description)** :对内容的文本描述 (e.g.,mpeg)
+
+##### S/MIME 功能
+
+- **在功能上，S/MIME与PGP相似，通过使用签名、加密或签名/加密的组合来保证MIME通信的安全，但 `强化了证书的规范**
+
+- **S/MIME的安全功能：**
+	- `封装的数据` : 加密的内容和加密的会话密钥
+	- `签名的数据` : 报文摘要＋发送者的私钥签名，然后使用基64变换编码内容和签名
+	- `透明签名` : 签名但不加密.只对签名进行基64变换，这样具有MIME支持而没有S/MIME权能的接收者也能读取，但无法验证签名
+	- `签名和封装的数据` : 各种不同嵌套顺序将数据加密、签名，如签名加密的数据或加密签名的数据
+
+- **S/MIME使用X.509证书方案**
+
+##### 使用的安全算法
+
+- `报文摘要` :  `SHA256` , SHA384 or SHA512 
+
+- `数字签名` :  `DSS` ，RSA
+
+- `对称密码算法` : Triple-DES,  `AES` ，RC2/40 (支持出口)
+
+- `公钥密码算法` : RSA with key sizes of 512 and 1024 bits, and Diffie-Hellman (for session keys，推荐，实际为变体Elgamal).
+
+## 8.2 远程登陆的安全协议(SSH)
+
+### 远程登录安全协议 SSH: Secure SHell
+
+- [x] SSH主要由芬兰赫尔辛基大学的Tatu Ylonen开发的，它提供一条安全的远程登录通道，可以代替telnet, rlogin等。由于受版权和加密算法的限制，很多人都使用它的免费替代产品OpenSSH。
+
+- [x] SSH协议有版本1(SSHv1)和版本2(SSHv2)，这两版本互不兼容，由SSH Communications Security Corp的Tatu Ylonen和Cisco公司进行规范提交，目前已经形成RFC4250-4254
+
+### SSH的体系
+
+- **SSH传输层(Transport Layer)协议：底层功能类似于SSL**
+	- 提供服务器主机认证，提供数据加密，提供数据完整性支持 
+
+- **SSH认证(Authentication)协议**
+	- 为服务器提供用户的身份认证
+
+- **SSH连接(Connection)协议**
+	- 将加密的信息隧道复用成若干个逻辑通道，提供给高层的应用协议使用。
+
+<p align="center">
+  <img src="./img/SSH的体系.png" alt="SSH的体系">
+</p>
+
+### SSH采用的认证、加密算法
+
+- [x] Supported authentication methods
+	- X509 Certificates
+	- Public keys
+	- Passwords
+
+- [x] Supported encryption algorithms
+	- 3DES
+	- Blowfish
+	- RC4
+	- Cast
+
+- [x] Supported hash algorithms
+	- SHA256(Default), SHA384 or SHA512 
+
+## 8.3 Web安全协议(HTTPS)
+
+### Web安全协议(HTTPS)
+
+- **https (http over SSL)**
+	- 由http和SSL结合来实现浏览器和服务器之间的安全通信
+	- https的功能被嵌入到所有当前的主流浏览器当中，但依赖于服务器端是否支持https通信
+	- `https的周知端口为443` ，http为80
+	- 定义在RFC2818：HTTP over TLS
+	- 基于标准的SSL/TLS服务
+
+- **当使用HTTPS时以下内容被加密**
+	- 请求文件的URL、文件内容、浏览器表单内容、cookie、http头标内容
+
+### HTTPS的使用
+
+- **连接建立**
+	- [x] 客户端同时扮演http的客户端和TLS的客户端，首先是TLS握手过程，然后是http请求，执行标准的http过程
+	- [x] 在一个客户端和服务器之间建立多个连接(一个会话过程包含一个或者多个连接)
+
+- **连接关闭**
+	- [x] 先关闭http：在http消息中包含“connection:close”
+	- [x] 再关闭SSL、TCP连接
+
+## 8.4 DNSSEC协议和系统
+
+### $\color{red}{DNSSEC应用背景}$
+
+- **DNS是Internet基础协议中至关重要的一个；**
+
+- **DNS设计时没有考虑安全问题；**
+
+- **互联网的迅速发展，安全性很重要。**
+
+<p align="center">
+  <img src="./img/DNSSEC应用背景.png" alt="DNSSEC应用背景">
+</p>
+
+## 8.5 SET协议
+
 # 第九章：无线局域网安全  
