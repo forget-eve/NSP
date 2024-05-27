@@ -4663,3 +4663,165 @@ $$
 - [x] 采用比率：由于SET设置成本比SSL高，目前国内外采用SSL的网上交易占多数。
 
 # 第九章：无线局域网安全  
+
+## 9.1 无线网络技术概述 
+
+### 无线网络分类
+
+- **可以分为多种类型**
+	- **无线广域网(Wireless Wide Area Network，WWAN)** 
+		> - [x] 2G、3G、4G、5G、B5G/6G
+	- **无线城域网(Wireless Metropolitan Area Network，WMAN)** 
+		> - [x] 移动电话、车载装置进行的移动数据通信，例IEEE802.20
+	- **无线局域网(Wireless Local Area Network，WLAN)** 
+		> - [x] 802.11系列
+	- **无线个人网(Wireless Personal Area Network，WPAN)** 
+		> - [x] IEEE802.15.4(ZigBee)和Bluetooth技术
+
+### Wireless Concept： WLAN、Bluetooth和3G
+
+<p align="center">
+  <img src="./img/Wireless-Concept.png" alt="Wireless Concept">
+	<br>
+	<br>
+	<img src="./img/Wireless-Concept1.png" alt="Wireless Concept">
+</p>
+
+## 9.2 WLAN概述
+
+- **WLAN的优点**
+	- 安装部署灵活性好
+	- 即插即用，接入方便
+	- 方便用户自由移动
+
+- **目前最流行的Internet接入网技术之一**
+	- 所有的笔记本和大部分的其他移动终端都具有WLAN接口
+	- ISP在机场、大型会议中心、商业中心、甚至咖啡店等热点场所提供WLAN接入。
+	- 作为移动通信数据业务的补充，中国移动、中国电信在各大城市均提供热点地区的WLAN接入服务
+	- 作为公共服务，WIFI热点已经广为部署
+	- USTC 无线服务  http://wlan.ustc.edu.cn
+
+### IEEE  WLAN标准————802.11家族
+
+- **802.11a**
+	- 5 GHz ，54Mbps
+
+- **802.11b(Wi-Fi: Wireless Fidelity)** 
+	- 2.4G，5.5Mbps和11Mbps
+
+- **802.11e**
+	- 提供QoS 保证的WLAN环境
+
+- **802.11g(提供与 802.11b相兼容容模式)**
+	- 2.4GHz，54 Mbps
+
+- **802.11i(无线安全标准)**
+	- 为增强WLAN的数据加密和认证性能
+
+### 802.11物理层系列标准
+
+<p align="center">
+  <img src="./img/802.11物理层系列标准.png" alt="802.11物理层系列标准">
+</p>
+
+### WLAN 的建立方式
+
+- [x] Ad-hoc Mode:
+	- 一群使用无线网卡的Station，直接相互连接，资源共享，无需通过接入点(Access Point)
+
+- [x] Infrastructure Mode
+	- 所有Station通过接入点连接成网络实现资源共享
+
+<p align="center">
+  <img src="./img/WLAN-的建立方式.png" alt="WLAN 的建立方式">
+</p>
+
+### WLAN的架构
+
+<p align="center">
+  <img src="./img/WLAN的架构.png" alt="WLAN的架构">
+	<br>
+	<br>
+	<img src="./img/WLAN的架构1.png" alt="WLAN的架构">
+</p>
+
+### Typical Wireless LAN Configuration
+
+<p align="center">
+  <img src="./img/Typical-Wireless-LAN-Configuration.png" alt="Typical Wireless LAN Configuration">
+</p>
+
+### OSI模型
+
+<p align="center">
+  <img src="./img/OSI模型0.png" alt="OSI模型">
+</p>
+
+- **物理层**
+	- **RF(Radio Frequency)**
+		> - **FHSS(Frequency-hopping spread spectrum，跳频**)
+		> - **DSSS(Direct-sequence spread spectrum，直序扩频)**
+		> - **OFDM(Orthogonal Frequency Division Multiplexing，正交频分复用)**
+	- **IR(Infrared Red)**
+
+- **链路层**
+	- **LLC**
+	- **MAC**
+
+#### MAC
+
+- **媒体访问控制**
+	- **DCF: Distribution Coordination Function**
+		> - **CSMA/CA (Carrier Sense Multiple Access/Collision Avoidance)**
+	- **PCF: Point Coordination Function**
+		> - [x] 可选的接入方式，类似于轮询
+
+- **帧的类型**
+	- **数据帧(传输数据)**
+	- **控制帧**
+		> - [x] RTS, CTS, ACK 等
+	- **管理帧(station之间/station和AP传输管理信息)**
+		> - [x] Authentication and Response, De-Authentication
+		> - [x] Association/Re-Association and Response, Disassociation
+		> - [x] Beacon and Probe frames(连接度量、电源管理)
+
+### WLAN涵盖的范围
+
+- **Wireless LAN (WLAN)是有线网络的延伸**
+
+<p align="center">
+  <img src="./img/WLAN涵盖的范围.png" alt="WLAN涵盖的范围">
+</p>
+
+### Seamless Handover(无缝切换)
+
+- [x] Infrastructure Network v.s. Ad Hoc Network
+
+- [x] Arranged in a cell structure, similar to cell phone network
+
+- [x] Cells need to overlap to enable seamless handovering
+
+<p align="center">
+  <img src="./img/Seamless-Handover(无缝切换).png" alt="Seamless Handover(无缝切换)">
+</p>
+
+### Account Roaming across different WISPs(跨域漫游)
+
+<p align="center">
+  <img src="./img/跨域漫游.png" alt="跨域漫游">
+</p>
+
+## 9.3 WLAN的安全需求
+
+## 9.4 WEP协议
+
+## 9.5 802.11的安全增强
+
+### IEEE 802.1x
+
+### IEEE 802.11i
+
+### WPA(WiFi Protected ACCESS)
+
+### WAPI(Wireless LAN Authentication and Privacy Infrastructure)
+
