@@ -4854,15 +4854,262 @@ $$
 
 ## 9.3 WLAN的安全需求
 
+### 无线链路的安全缺陷
+
+- [x] 物理信道的开放性
+
+- [x] 网上涌现出相关的攻击软件
+
+- [x] 可能的攻击类型
+	- 窃听
+	- 通信阻断
+	- 数据的注入和篡改
+	- 中间人攻击
+	- 客户端和接入点伪造
+
+### WLAN 安全机制
+
+- [x] 用户认证
+	- SSID( **Service Set Identifier, a 32-character 的唯一标识** )
+		> - Probe request/probe response /beacon帧中包含SSID
+	- MAC地址过滤
+		> - AP上具有可接入的MAC地址列表
+	- 基于安全参数的认证方式
+	- 外部RADIUS等基础设施
+
+- [x] 用户授权
+	- Full access or none(细粒度需要构建外部基础设施)Data Security
+
+- [x] 数据安全
+	- Static key based
+		> - WEP(Wired Equivalent Privacy)
+	- Dynamic key based
+		> - LEAP(Lightweight Extensible Authentication Protocol)
+		> - 802.1X
+
+### 802.11 的安全机制
+
+- [x] 身份认证Authentication
+	- 开放式系统(Open System) $\color{red}{公开SSID}$
+		> - 是传统802.11的缺省设置，不进行认证 
+	- 封闭式系统(Closed System) $\color{red}{不公开SSID}$
+	- 共享密钥认证(Shared key authentication)
+		> - 使用一个共享的密钥，完成AP对接入点的认证
+		> - 挑战-应答(Challenge-Response)
+
+- [x] 数据机密性Confidentiality
+	- WEP中使用一个40/104 bit 密钥，一个24 bit 的初始向量IV 
+
+- [x] 数据完整性Integrity
+	- WEP中使用CRC32
+
+- [x] 认证
+	- WEP中采用基于预共享密钥方式的挑战-应答
+
+### 共享密钥认证
+
+<p align="center">
+  <img src="./img/共享密钥认证.png" alt="共享密钥认证">
+</p>
+
+### 802.11认证方式
+
+<p align="center">
+  <img src="./img/802.11认证方式.png" alt="802.11认证方式">
+</p>
+
 ## 9.4 WEP协议
+
+### WEP protocol
+
+- [x] WEP (Wired Equivalent Privacy) protocol
+	- A key shared between all the members of the BSS
+	- Using RC4 `stream cipher encryption` algorithm
+	- 24-bit initialization vector
+	- Append a CRC-32 checksum of the frame payload plaintext in  its encapsulation
+	- 基本功能
+		> - **访问控制** ：没有WEP密钥的非法用户无法访问网络
+		> - **数据保密性** ：通过加密手段保护WLAN传输的数据
+
+### WEP数据的完整性和机密性
+
+<p align="center">
+  <img src="./img/WEP数据的完整性和机密性.png" alt="WEP数据的完整性和机密性">
+</p>
+
+### 协议弱点
+
+- [x] 密钥使用的不规范
+	- 共享固定使用、直接加密时的暴露、密钥长度
+
+- [x] 初始向量IV
+	- 24bit，明码传送
+	- 厂商设计不合理
+		> - 连接重新开始时从零开始
+		> - 数据包每增加1，IV+1
+		> - 与预共享密钥直接串接，在RC4算法容易产生弱密钥
+	- IV长度不足，使得重复几率增加
+
+- [x] 数据完整性检验位
+	- CRC-32进行差错判断，被放入数据进行加密，无法预先进行数据完整性判断
+
+- [x] 没有提供源和目的地址的完整性校验信息，并且缺少重放攻击的对策，缺少对接入设备的认证
+
+### 攻击手段
+
+- [x] 网络扫描
+	- 扫描SSID、Channel
+
+- [x] 暴力以及字典攻击法
+	- 猜出使用者所选取的密钥
+
+- [x] 已知或者猜测原文攻击法
+	- 利用已知部分明文信息和WEP重复使用IV的弱点解出其他加密包
+
+- [x] 密钥弱点攻击法
+	- 利用RC4决定密钥算法的漏洞
+
+- [x] CRC功能不可靠，它具有线性性质，可以轻易构造CRC
+	- $\color{red}{CRC(A+B)=CRC(A)+CRC(B)}$
+
+### 802.11的安全增强
+
+- [x] 使用104-bit WEP 密钥. 这个已经被广泛应用，40bit的密钥安全性很差 ->WPA(Wi-Fi Protected Access)
+
+- [x] 标准的密钥交换(exchange)和分发(distribution). 802.11的共享密钥机制很不安全，可以用一系列协议来完成，例如RADIUS, Kerberos, SSL/TLS和IPSec. 
+
+- [x] 使用带有密钥的MAC算法进行数据完整性校验
+
+- [x] 双向认证. 抵抗中间人窃取数据或者会话劫持
+
+- [x] 采用其他安全协议
 
 ## 9.5 802.11的安全增强
 
+- [x] 目前的“增强型”认证解决方案及相关涉及技术
+	- 802.1x (基于Client/Server的访问控制和认证协议 )
+	- `WPA` (Wi-Fi Protected Access)
+	- `IEEE 802.11i(WPA2)`
+	- `WAPI`
+	- RADIUS提供身份认证服务
+	- CA证书发放
+	- Active Directory进行身份验证
+
 ### IEEE 802.1x
+
+- [x] Port-Based Network Access Control基于端口网络接入控制
+	- 可以使用在有线或者无线环境下
+	- AP必须支持802.1x
+	- 在认证通过之前，802.1x只允许EAPoL(基于局域网的扩展认证协议)数据通过设备连接的交换机端口
+	- 认证通过以后，正常的数据可以顺利地通过以太网端口
+	- 支持RADIUS和Kerberos服务
+
+- [x] Extensible authentication via EAP
+	- RFC 2284
+
+- [x] 密钥管理
+	- 对每用户支持独一无二的密钥
+	- 动态更新
+
+<p align="center">
+  <img src="./img/802.1x.png" alt="802.1x">
+</p>
+
+#### EAP(Extensible Access Protocol)
+
+- **EAP 最初设计用来PPP的接入认证**
+	- 支持多种认证方式： smart cards, Kerberos, Public Key, TLS, One Time Passwords, …
+	- 但是被许多其他接入认证所使用：PPP, WLAN (IEEE 802.1X), Bluetooth, …
+	- IETF EAP工作组  http://www.ietf.org/html.charters/eap-charter.html
+
+- **EAP 的组成**
+	- 很多Request/Response 对; 由网络发出请求
+		> - 以EAP-Request/Identity请求开始
+	- 以网络回应的 EAP-Success 或 EAP-Failure而结束
+
+#### RADIUS 
+
+- **认证服务器－Performs the actual authentication of the client**
+
+<p align="center">
+  <img src="./img/RADIUS.png" alt="RADIUS">
+</p>
+
+#### 802.1x WLAN架构
+
+<p align="center">
+  <img src="./img/802.1x-WLAN架构.png" alt="802.1x WLAN架构">
+</p>
+
+#### 802.1x认证实体
+
+- [x] IEEE 802.1x协议的体系结构：
+	- 客户端Supplicant System
+	- 认证系统Authenticator System
+	- 认证服务器Authentication Server System
+
+<p align="center">
+  <img src="./img/802.1x-认证实体.png" alt="802.1x 认证实体">
+</p>
 
 ### IEEE 802.11i
 
+- [x] 对WEP的缺陷加以改进，增强加密和认证功能。
+
+- [x] 组成：
+	- 使用802.1x认证和密钥管理方式
+	- 暂时密钥完整性协议(TKIP: Temporal Key Integrity Protocol)：是一种数据保密协议。 $\color{red}{WPA，兼容升级WEP}$
+		> - 采用48bits的IV值，设计IV顺序规则，128bits的密钥
+		> - 采用一种叫 Michael 的消息完整性代码，验证数据包是否来自所需的数据源。 
+	- CBC-MAC 计数模式协议(CCMP: The Counter-Mode/CBC-MAC protocol)：是一种数据保密协议。 $\color{red}{WPA2，推荐}$
+		> - 可处理数据包的身份验证和加密。
+		> - 对于加密，CCMP 在计数模式下采用了 AES 的算法；
+		> - 对于身份验证和完整性，CCMP 使用了密码分组链接 - 报文鉴别代码(CBC-MAC)。
+		> - CCMP 使用了128位的密钥。 
+
 ### WPA(WiFi Protected ACCESS)
+
+- [x] 在802.11i获得批准之前，现有WEP等存在问题，采用WPA替代，不是IEEE标准，但为802.11i的一部分。
+
+- [x] 要求支持WPA的设备在802.11i获准之后能够升级与802.11i兼容
+
+- [x] 特点
+	- 基于802.1x，双向认证
+	- `密钥管理和动态的会话密钥`
+	- 加强的加密算法TKIP
+
+#### 后续版本WPA3
+
+- [x] Wi-Fi联盟组织于2018年1月8日在美国拉斯维加斯的国际消费电子展(CES)上发布的Wi-Fi新加密协议，是Wi-Fi身份验证标准WPA2技术的的后续版本
+
+- [x] 三个主要方面的改进
+	- 对于咖啡馆、餐厅等无加密的开放Wi-Fi场景下，将对每台设备的通信数据进行加密;
+	- 增加了字典法暴力密码破解的难度，同时，如果密码多次输错，将锁定攻击行为;
+	- 使用新的握手重传方法取代WPA2的四次握手。
 
 ### WAPI(Wireless LAN Authentication and Privacy Infrastructure)
 
+- [x] 无线LAN认证和保密基础设施(WLAN Authentication and Privacy Infrastructure)，由两部分组成
+	- WAI(WLAN `Authentication` Infrastructure)，采用类似于802.1x结构的基于端口的认证模式
+	- WPI(WLAN `Privacy` Infrastructure)，由国家密码管理办公室提供，算法非公开
+
+- [x] 是我国2003年5月发布的，由ISO/IEC授权的IEEE Registration Authority审查获得认可无线LAN安全标准 
+
+- [x] WAPI采用国家密码管理委员会办公室批准的公开密钥体制的椭圆曲线密码算法和对成密钥体制的分组密码算法，实现了设备的身份鉴别、链路验证、访问控制和用户信息在无线传输状态下的加密保护。算法非公开 
+
+#### Vulnerability of Using SSIDs
+
+- [x] SSID can be obtained by eavesdropping
+
+<p align="center">
+  <img src="./img/Vulnerability.png" alt="Vulnerability of Using SSIDs">
+	<br>
+	<br>
+	<img src="./img/Vulnerability1.png" alt="Vulnerability of Using SSIDs">
+</p>
+
+#### MAC Address Filtering in APs
+
+<p align="center">
+  <img src="./img/MAC-Address-Filtering-in-APs.png" alt="MAC Address Filtering in APs">
+</p>
