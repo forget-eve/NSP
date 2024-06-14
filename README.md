@@ -138,10 +138,10 @@
 
 - [x] $\text{伪造(Fabrication)} \leftarrow \rightarrow \text{可认证性(Authenticity)}$
 
-<p align="center">
+<p align="center"  id="attack">
   <img src="./img/常见攻击小结.png" alt="常见攻击小结">
   <p align="center">
-   <span id="attack">常见攻击小结</span>
+   <span>常见攻击小结</span>
   </p>
 </p>
 
