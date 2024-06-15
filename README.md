@@ -5310,7 +5310,7 @@ $$NAT-PT:过载(Overloading) \leftarrow 一对多$$
 
 ## PGP，SET，WEP
 
-- [x] PGP
+- [x] [PGP](#pgppretty-good-privacy)
 	- 基本功能、安全服务、操作原理
 	- 公钥环、私钥环
 	- 密钥的标识KeyID(公钥的低64位)
@@ -5319,7 +5319,7 @@ $$NAT-PT:过载(Overloading) \leftarrow 一对多$$
 - [x] [SET协议](#_85-set协议)
 	- 基本概念、数字信封、双重数字签名等
 
-- [x] WEP
+- [x] [WEP](#_94-wep协议)
 	- WLAN的基本概念、安全需求
 	- 漫游认证、切换认证的区别，可能的方法
 	- 802.1x基本认证架构和流程
